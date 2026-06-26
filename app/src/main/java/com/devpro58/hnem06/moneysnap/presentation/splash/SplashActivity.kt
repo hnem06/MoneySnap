@@ -17,6 +17,9 @@ import com.devpro58.hnem06.moneysnap.presentation.welcome.WelcomeActivity
 
 class SplashActivity : AppCompatActivity() {
 
+    private val handler = Handler(Looper.getMainLooper())
+    private val navigateRunnable = Runnable { navigateToNextScreen() }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -27,12 +30,17 @@ class SplashActivity : AppCompatActivity() {
             insets
         }
 
-        Handler(Looper.getMainLooper()).postDelayed({
-            navigateToNextScreen()
-        }, 1500)
+        handler.postDelayed(navigateRunnable, 1500)
+    }
+
+    override fun onDestroy() {
+        handler.removeCallbacks(navigateRunnable)
+        super.onDestroy()
     }
 
     private fun navigateToNextScreen() {
+        if (isFinishing || isDestroyed) return
+
         val currentUser = FirebaseAuth.getInstance().currentUser
         val prefs = getSharedPreferences("MoneySnapPrefs", Context.MODE_PRIVATE)
         val isOnboardingDone = prefs.getBoolean("language_select_completed", false)
