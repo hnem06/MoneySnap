@@ -17,7 +17,6 @@ class WelcomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         val sharedPrefs = getSharedPreferences("MoneySnapPrefs", Context.MODE_PRIVATE)
-        val isCompleted = sharedPrefs.getBoolean("language_select_completed", false)
 
         if (!sharedPrefs.contains("language_code")) {
             sharedPrefs.edit()
