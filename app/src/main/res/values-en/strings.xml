@@ -1,0 +1,57 @@
+<resources>
+    <string name="app_name">MoneySnap</string>
+    <string name="switch_to_register">Don\'t have an account? &lt;font color="#096332"&gt;&lt;b&gt;Register&lt;/b&gt;&lt;/font&gt;</string>
+    <string name="switch_to_login">Already have an account? &lt;font color="#096332"&gt;&lt;b&gt;Login&lt;/b&gt;&lt;/font&gt;</string>
+    <string name="terms_and_conditions">I agree to the &lt;font color="#096332"&gt;&lt;b&gt;Terms &amp; Conditions&lt;/b&gt;&lt;/font&gt; and &lt;font color="#096332"&gt;&lt;b&gt;Privacy Policy&lt;/b&gt;&lt;/font&gt;.</string>
+    
+    <string name="welcome_title">Welcome to\n&lt;font color="#17C964"&gt;MoneySnap&lt;/font&gt;</string>
+    <string name="welcome_subtitle">Manage personal finances easily via images</string>
+    <string name="welcome_feature_capture">Capture</string>
+    <string name="welcome_feature_analyze">Analyze</string>
+    <string name="welcome_feature_manage">Manage</string>
+    <string name="welcome_btn_start">Get Started</string>
+    <string name="welcome_terms">By continuing, you agree to our &lt;u&gt;Terms of Service&lt;/u&gt; and &lt;u&gt;Privacy Policy&lt;/u&gt;.</string>
+    
+    <string name="lang_select_title">Select Language</string>
+    <string name="lang_select_subtitle">Please select the display language you want to use for MoneySnap.</string>
+    <string name="lang_vietnamese">Tiếng Việt</string>
+    <string name="lang_english">English</string>
+    <string name="lang_french">Français</string>
+    <string name="lang_japanese">日本語</string>
+    <string name="lang_btn_continue">Continue</string>
+
+    <!-- Login Screen Strings -->
+    <string name="login_subtitle">Login to continue tracking your expenses.</string>
+    <string name="login_email_hint">Email Address</string>
+    <string name="login_password_hint">Password</string>
+    <string name="login_forgot_password">Forgot password?</string>
+    <string name="login_btn">Login</string>
+    <string name="login_or_divider">OR CONTINUE WITH</string>
+
+    <!-- Register Screen Strings -->
+    <string name="register_title">Create your account</string>
+    <string name="register_subtitle">Join MoneySnap to manage finances easily.</string>
+    <string name="register_label_name">Full Name</string>
+    <string name="register_label_email">Email</string>
+    <string name="register_label_password">Password</string>
+    <string name="register_label_confirm_password">Confirm Password</string>
+    <string name="register_btn">Register</string>
+
+    <!-- Validation & Error Messages -->
+    <string name="error_email_empty">Please enter your email</string>
+    <string name="error_password_empty">Please enter your password</string>
+    <string name="error_with_message">Error: %s</string>
+    <string name="error_login_failed">Login failed</string>
+    <string name="error_firebase_login_failed">Firebase sign-in failed</string>
+    <string name="error_google_login">Google sign-in error: %s</string>
+    <string name="error_name_empty">Please enter your full name</string>
+    <string name="error_password_too_short">Password must be at least 6 characters</string>
+    <string name="error_password_mismatch">Passwords do not match</string>
+    <string name="error_terms_not_checked">You must agree to the Terms &amp; Conditions</string>
+    <string name="error_register_failed">Registration failed</string>
+
+    <!-- Terms Dialog -->
+    <string name="terms_dialog_title">Terms &amp; Conditions</string>
+    <string name="terms_dialog_message">Welcome to MoneySnap. By using our app, you agree to comply with the following terms:\n\n1. App Usage: The app provides personal expense tracking services. You are responsible for keeping your account information secure.\n\n2. Privacy: Your financial data is stored and secured absolutely. We are committed to not sharing your data with any third parties.\n\n3. Changes to Terms: We reserve the right to update these terms at any time to improve our service. Updates take effect immediately upon posting.\n\nThank you for choosing MoneySnap!</string>
+    <string name="terms_dialog_btn_ok">Got it</string>
+</resources>

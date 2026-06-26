@@ -1,3 +1,60 @@
 <resources>
     <string name="app_name">MoneySnap</string>
+    <string name="switch_to_register">Chưa có tài khoản? &lt;font color="#096332"&gt;&lt;b&gt;Đăng ký&lt;/b&gt;&lt;/font&gt;</string>
+    <string name="switch_to_login">Đã có tài khoản? &lt;font color="#096332"&gt;&lt;b&gt;Đăng nhập&lt;/b&gt;&lt;/font&gt;</string>
+    <string name="terms_and_conditions">Tôi đồng ý với &lt;font color="#096332"&gt;&lt;b&gt;Điều khoản &amp; Điều kiện&lt;/b&gt;&lt;/font&gt; và &lt;font color="#096332"&gt;&lt;b&gt;Chính sách bảo mật&lt;/b&gt;&lt;/font&gt;.</string>
+    
+    <string name="welcome_title">Chào mừng đến với\n&lt;font color="#17C964"&gt;MoneySnap&lt;/font&gt;</string>
+    <string name="welcome_subtitle">Quản lý tài chính cá nhân dễ dàng qua hình ảnh</string>
+    <string name="welcome_feature_capture">Chụp</string>
+    <string name="welcome_feature_analyze">Phân tích</string>
+    <string name="welcome_feature_manage">Quản lý</string>
+    <string name="welcome_btn_start">Bắt đầu ngay</string>
+    <string name="welcome_terms">Bằng việc tiếp tục, bạn đồng ý với &lt;u&gt;Điều khoản dịch vụ&lt;/u&gt; và &lt;u&gt;Chính sách bảo mật&lt;/u&gt; của chúng tôi.</string>
+    
+    <string name="lang_select_title">Chọn ngôn ngữ</string>
+    <string name="lang_select_subtitle">Vui lòng chọn ngôn ngữ hiển thị bạn muốn sử dụng cho MoneySnap.</string>
+    <string name="lang_vietnamese">Tiếng Việt</string>
+    <string name="lang_english">English</string>
+    <string name="lang_french">Français</string>
+    <string name="lang_japanese">日本語</string>
+    <string name="lang_btn_continue">Tiếp tục</string>
+
+    <!-- Login Screen Strings -->
+    <string name="login_subtitle">Đăng nhập để tiếp tục ghi chép chi tiêu.</string>
+    <string name="login_email_hint">Địa chỉ Email</string>
+    <string name="login_password_hint">Mật khẩu</string>
+    <string name="login_forgot_password">Quên mật khẩu?</string>
+    <string name="login_btn">Đăng nhập</string>
+    <string name="login_or_divider">HOẶC TIẾP TỤC VỚI</string>
+
+    <!-- Register Screen Strings -->
+    <string name="register_title">Tạo tài khoản của bạn</string>
+    <string name="register_subtitle">Tham gia MoneySnap để quản lý tài chính dễ dàng.</string>
+    <string name="register_label_name">Họ và tên</string>
+    <string name="register_label_email">Email</string>
+    <string name="register_label_password">Mật khẩu</string>
+    <string name="register_label_confirm_password">Xác nhận mật khẩu</string>
+    <string name="register_btn">Đăng ký</string>
+    
+    <!-- Terms Dialog -->
+    <string name="terms_dialog_title">Điều khoản &amp; Điều kiện</string>
+    <string name="terms_dialog_message">Chào mừng bạn đến với MoneySnap. Khi sử dụng ứng dụng của chúng tôi, bạn đồng ý tuân thủ các điều khoản sau:\n\n1. Sử dụng ứng dụng: Ứng dụng cung cấp dịch vụ ghi chép chi tiêu cá nhân. Bạn có trách nhiệm bảo mật thông tin tài khoản của mình.\n\n2. Quyền riêng tư: Dữ liệu tài chính của bạn được lưu trữ và bảo mật tuyệt đối. Chúng tôi cam kết không chia sẻ dữ liệu của bạn cho bất kỳ bên thứ ba nào.\n\n3. Thay đổi điều khoản: Chúng tôi có quyền cập nhật điều khoản bất kỳ lúc nào nhằm tối ưu dịch vụ. Bản cập nhật sẽ có hiệu lực ngay khi được đăng tải.\n\nCảm ơn bạn đã tin tưởng lựa chọn MoneySnap!</string>
+    <string name="terms_dialog_btn_ok">Đã hiểu</string>
+
+    <!-- Validation & Error Messages -->
+    <string name="error_email_empty">Vui lòng nhập email</string>
+    <string name="error_password_empty">Vui lòng nhập mật khẩu</string>
+    <string name="error_with_message">Lỗi: %s</string>
+    <string name="error_login_failed">Đăng nhập thất bại</string>
+    <string name="error_firebase_login_failed">Đăng nhập với Firebase thất bại</string>
+    <string name="error_google_login">Lỗi đăng nhập Google: %s</string>
+    <string name="error_name_empty">Vui lòng nhập họ và tên</string>
+    <string name="error_password_too_short">Mật khẩu phải tối thiểu 6 ký tự</string>
+    <string name="error_password_mismatch">Mật khẩu xác nhận không khớp</string>
+    <string name="error_terms_not_checked">Bạn phải đồng ý với Điều khoản &amp; Điều kiện</string>
+    <string name="error_register_failed">Đăng ký thất bại</string>
+
+    <!-- Google Auth Web Client ID -->
+    <string name="google_web_client_id">1020959885659-8gukmhjttk9jab1nin28hsl1b74r254d.apps.googleusercontent.com</string>
 </resources>
