@@ -12,7 +12,20 @@
           "package_name": "com.devpro58.hnem06.moneysnap"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1020959885659-9h737o8rh5av83tvpi74g3es052kealf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.devpro58.hnem06.moneysnap",
+            "certificate_hash": "70e57909b15580d8846efc3188f1c7d2abefe916"
+          }
+        },
+        {
+          "client_id": "1020959885659-8gukmhjttk9jab1nin28hsl1b74r254d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBWPxx3iPHMQ4t9syfXPv6AZheKtbjmf7Q"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1020959885659-8gukmhjttk9jab1nin28hsl1b74r254d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

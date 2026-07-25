@@ -1,0 +1,35 @@
+rules_version = '2';
+
+// MoneySnap — ảnh hoá đơn, mỗi user chỉ đọc/ghi thư mục của mình.
+// Đường dẫn app ghi: receipts/{userId}/{expenseId}.jpg
+// Ảnh đã được nén xuống ~1280px / JPEG q85 (thường <1MB) trước khi upload,
+// nên ngưỡng 5MB an toàn, không chặn nhầm ảnh camera.
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /receipts/{userId}/{fileName} {
+      allow read, delete: if request.auth != null
+                          && request.auth.uid == userId;
+
+      allow create, update: if request.auth != null
+                            && request.auth.uid == userId
+                            && request.resource.size < 5 * 1024 * 1024
+                            && request.resource.contentType.matches('image/.*');
+    }
+
+    // Ảnh đại diện: avatars/{userId}/avatar.jpg — chỉ chủ tài khoản đọc/ghi/xóa.
+    match /avatars/{userId}/{fileName} {
+      allow read, delete: if request.auth != null
+                          && request.auth.uid == userId;
+
+      allow create, update: if request.auth != null
+                            && request.auth.uid == userId
+                            && request.resource.size < 5 * 1024 * 1024
+                            && request.resource.contentType.matches('image/.*');
+    }
+
+    // Chặn mọi đường dẫn khác.
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
