@@ -1,15 +1,138 @@
+# ============================================
+# Android / Gradle / Kotlin
+# ============================================
 *.iml
-.gradle
+.gradle/
+.kotlin/
+local.properties
 /local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
 /build
+**/build/
 /captures
 .externalNativeBuild
 .cxx
-local.properties
+proguard/
+
+# Build outputs
+*.apk
+*.aab
+*.ap_
+*.dex
+/app/release/
+/release/
+/app/build/
+**/release/
+**/debug/
+
+# Native / NDK
+*.so.debug
+obj/
+
+# ============================================
+# Signing & Secrets (NEVER COMMIT)
+# ============================================
+*.jks
+*.keystore
+*.p12
+*.pfx
+keystore.properties
+key.properties
+signing.properties
+.env
+.env.*
+secrets.properties
+secrets.xml
+
+# ============================================
+# Firebase / Google Services
+# ============================================
+google-services.json
+GoogleService-Info.plist
+.firebaserc
+firebase-debug.log
+firebase-debug.*.log
+.firebase/
+
+# ============================================
+# IDE - Android Studio / IntelliJ
+# ============================================
+.idea/*
+!.idea/codeStyles/
+!.idea/inspectionProfiles/
+!.idea/dictionaries/
+
+# ============================================
+# IDE - Others
+# ============================================
+.vscode/
+.fleet/
+*.swp
+*.swo
+*~
+
+# ============================================
+# OS files
+# ============================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ============================================
+# Logs / Crash dumps
+# ============================================
+*.log
+hs_err_pid*
+replay_pid*
+crash-reports/
+
+# ============================================
+# AI Assistants / Tools (private context)
+# ============================================
+.claude/
+.claude.local.md
+CLAUDE.local.md
+.superpowers/
+.cursor/
+.cursorrules
+.cursorignore
+.aider*
+.aiderignore
+.windsurf/
+.windsurfrules
+.continue/
+.codeium/
+.copilot/
+.github/copilot-*
+.anthropic/
+.openai/
+.gemini/
+GEMINI.md
+AGENTS.md
+.roo/
+.cline/
+.tabnine/
+
+# ============================================
+# Documentation / Design (private)
+# ============================================
+/app/STRUCT.MD
+/app/STRUCT.md
+/app/DESIGN.md
+/app/design.md
+/docs/
+/tools/
+
+# ============================================
+# Misc junk
+# ============================================
+install
+list
+plugin
+*.tmp
+*.bak
+*.orig
