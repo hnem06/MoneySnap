@@ -1,36 +1,59 @@
 package com.devpro58.hnem06.moneysnap.presentation.splash
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.google.firebase.auth.FirebaseAuth
+import androidx.lifecycle.ViewModelProvider
 import com.devpro58.hnem06.moneysnap.R
+import com.devpro58.hnem06.moneysnap.domain.usecase.onboarding.GetLanguageCodeUseCase
 import com.devpro58.hnem06.moneysnap.presentation.auth.AuthScreen
 import com.devpro58.hnem06.moneysnap.presentation.main.MainActivity
 import com.devpro58.hnem06.moneysnap.presentation.welcome.WelcomeActivity
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
 
+    @Inject lateinit var getLanguageCode: GetLanguageCodeUseCase
+
     private val handler = Handler(Looper.getMainLooper())
-    private val navigateRunnable = Runnable { navigateToNextScreen() }
+    private val navigateRunnable = Runnable { viewModel.resolveDestination() }
+    private lateinit var viewModel: SplashViewModel
+    private var hasNavigated = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        applyStoredLocale()
         enableEdgeToEdge()
         setContentView(R.layout.activity_splash)
+        viewModel = ViewModelProvider(this)[SplashViewModel::class.java]
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        handler.postDelayed(navigateRunnable, 1500)
+        viewModel.destination.observe(this) { destination ->
+            navigateTo(destination)
+        }
+
+        handler.postDelayed(navigateRunnable, 500)
+    }
+
+    private fun applyStoredLocale() {
+        val languageCode = getLanguageCode() ?: return
+        AppCompatDelegate.setApplicationLocales(
+            LocaleListCompat.forLanguageTags(languageCode)
+        )
     }
 
     override fun onDestroy() {
@@ -38,17 +61,16 @@ class SplashActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-    private fun navigateToNextScreen() {
-        if (isFinishing || isDestroyed) return
+    private fun navigateTo(destination: SplashDestination) {
+        if (hasNavigated || isFinishing || isDestroyed) return
+        hasNavigated = true
 
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        val prefs = getSharedPreferences("MoneySnapPrefs", Context.MODE_PRIVATE)
-        val isOnboardingDone = prefs.getBoolean("language_select_completed", false)
-
-        val intent = when {
-            currentUser != null -> Intent(this, MainActivity::class.java)
-            isOnboardingDone    -> Intent(this, AuthScreen::class.java)
-            else                -> Intent(this, WelcomeActivity::class.java)
+        val intent = when (destination) {
+            SplashDestination.Auth -> Intent(this, AuthScreen::class.java)
+            SplashDestination.Welcome -> Intent(this, WelcomeActivity::class.java)
+            is SplashDestination.Main -> Intent(this, MainActivity::class.java).apply {
+                putExtra(MainActivity.EXTRA_SHOW_SESSION_ERROR, destination.showSessionError)
+            }
         }
 
         startActivity(intent)
