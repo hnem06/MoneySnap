@@ -1,6 +1,5 @@
 package com.devpro58.hnem06.moneysnap.presentation.welcome
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
@@ -9,24 +8,22 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 import com.devpro58.hnem06.moneysnap.R
 import com.devpro58.hnem06.moneysnap.presentation.auth.AuthScreen
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class WelcomeActivity : AppCompatActivity() {
+
+    private lateinit var viewModel: WelcomeViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel = ViewModelProvider(this)[WelcomeViewModel::class.java]
 
-        val sharedPrefs = getSharedPreferences("MoneySnapPrefs", Context.MODE_PRIVATE)
-
-        if (!sharedPrefs.contains("language_code")) {
-            sharedPrefs.edit()
-                .putString("language_code", "vi")
-                .apply()
-
-            val appLocale = LocaleListCompat.forLanguageTags("vi")
-            AppCompatDelegate.setApplicationLocales(appLocale)
-
-        }
+        val languageCode = viewModel.ensureDefaultLanguage()
+        AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(languageCode))
 
         enableEdgeToEdge()
         setContentView(R.layout.activity_welcome)
@@ -57,10 +54,7 @@ class WelcomeActivity : AppCompatActivity() {
     }
 
     fun finishOnboarding() {
-        getSharedPreferences("MoneySnapPrefs", Context.MODE_PRIVATE)
-            .edit()
-            .putBoolean("language_select_completed", true)
-            .apply()
+        viewModel.finishOnboarding()
         startAuthScreen()
     }
 
