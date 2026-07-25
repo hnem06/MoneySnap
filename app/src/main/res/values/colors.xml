@@ -2,4 +2,49 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="primary_green">#096332</color>
+    <color name="secondary_green">#17C964</color>
+    <color name="light_gray_bg">#F3F4F6</color>
+    <color name="border_gray">#E5E7EB</color>
+    <color name="text_dark">#111827</color>
+    <color name="text_muted">#6B7280</color>
+    <color name="divider_color">#E5E7EB</color>
+    <color name="success_green">#16A34A</color>
+    <color name="danger_red">#DC2626</color>
+    <color name="soft_green">#DCFCE7</color>
+    <color name="card_shadow_hint">#1A000000</color>
+    <color name="nav_active_indicator">#4CAF50</color>
+    <color name="surface">#F3F4F6</color>
+    <color name="on_surface">#111827</color>
+
+    <!-- Hero header (Stats) -->
+    <color name="white_12">#1FFFFFFF</color>
+    <color name="white_70">#B3FFFFFF</color>
+    <color name="hero_delta_good">#A7F3D0</color>
+    <color name="hero_delta_bad">#FECACA</color>
+
+    <!-- Fixed per-category chart colors (CVD-validated set; gray = "no category").
+         Assigned by entity, never by rank. -->
+    <color name="cat_food">#EB6834</color>
+    <color name="cat_transport">#2A78D6</color>
+    <color name="cat_shopping">#E87BA4</color>
+    <color name="cat_entertainment">#4A3AA7</color>
+    <color name="cat_bills">#EDA100</color>
+    <color name="cat_travel">#1BAF7A</color>
+    <color name="cat_other">#E34948</color>
+    <color name="cat_uncategorized">#898781</color>
+
+    <!-- Neutral chart chrome -->
+    <color name="bar_inactive">#D1D5DB</color>
+    <color name="progress_track">#EFF1F3</color>
+    <color name="icon_neutral">#43474E</color>
+    <color name="icon_square_bg">#F3F4F5</color>
+
+    <!-- Semantic surfaces & accents (overridden in values-night for dark mode).
+         card_bg = "white used as a surface"; white stays white (text/strokes on green). -->
+    <color name="card_bg">#FFFFFF</color>
+    <color name="accent_green">#064E3B</color>
+    <color name="calendar_today_bg">#FFF7D6</color>
+    <color name="calendar_today_border">#FACC15</color>
+    <color name="calendar_today_accent">#D97706</color>
 </resources>

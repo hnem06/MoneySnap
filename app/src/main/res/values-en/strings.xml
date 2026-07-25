@@ -3,15 +3,15 @@
     <string name="switch_to_register">Don\'t have an account? &lt;font color="#096332"&gt;&lt;b&gt;Register&lt;/b&gt;&lt;/font&gt;</string>
     <string name="switch_to_login">Already have an account? &lt;font color="#096332"&gt;&lt;b&gt;Login&lt;/b&gt;&lt;/font&gt;</string>
     <string name="terms_and_conditions">I agree to the &lt;font color="#096332"&gt;&lt;b&gt;Terms &amp; Conditions&lt;/b&gt;&lt;/font&gt; and &lt;font color="#096332"&gt;&lt;b&gt;Privacy Policy&lt;/b&gt;&lt;/font&gt;.</string>
-    
+
     <string name="welcome_title">Welcome to\n&lt;font color="#17C964"&gt;MoneySnap&lt;/font&gt;</string>
-    <string name="welcome_subtitle">Manage personal finances easily via images</string>
+    <string name="welcome_subtitle">Manage personal finances easily with receipt photos</string>
     <string name="welcome_feature_capture">Capture</string>
     <string name="welcome_feature_analyze">Analyze</string>
     <string name="welcome_feature_manage">Manage</string>
     <string name="welcome_btn_start">Get Started</string>
     <string name="welcome_terms">By continuing, you agree to our &lt;u&gt;Terms of Service&lt;/u&gt; and &lt;u&gt;Privacy Policy&lt;/u&gt;.</string>
-    
+
     <string name="lang_select_title">Select Language</string>
     <string name="lang_select_subtitle">Please select the display language you want to use for MoneySnap.</string>
     <string name="lang_vietnamese">Tiếng Việt</string>
@@ -21,21 +21,34 @@
     <string name="lang_btn_continue">Continue</string>
 
     <!-- Login Screen Strings -->
-    <string name="login_subtitle">Login to continue tracking your expenses.</string>
-    <string name="login_email_hint">Email Address</string>
+    <string name="login_subtitle">Log in to continue tracking your expenses.</string>
+    <string name="login_email_hint">Email address</string>
     <string name="login_password_hint">Password</string>
     <string name="login_forgot_password">Forgot password?</string>
-    <string name="login_btn">Login</string>
+    <string name="login_btn">Log in</string>
     <string name="login_or_divider">OR CONTINUE WITH</string>
 
     <!-- Register Screen Strings -->
     <string name="register_title">Create your account</string>
-    <string name="register_subtitle">Join MoneySnap to manage finances easily.</string>
-    <string name="register_label_name">Full Name</string>
+    <string name="register_subtitle">Join MoneySnap to manage your finances with less effort.</string>
+    <string name="register_label_name">Full name</string>
     <string name="register_label_email">Email</string>
     <string name="register_label_password">Password</string>
-    <string name="register_label_confirm_password">Confirm Password</string>
+    <string name="register_label_confirm_password">Confirm password</string>
     <string name="register_btn">Register</string>
+
+    <!-- Forgot Password -->
+    <string name="forgot_title">Forgot Password</string>
+    <string name="forgot_subtitle">Enter your email address to receive password reset instructions.</string>
+    <string name="forgot_email_hint">Email address</string>
+    <string name="forgot_btn">Send Request</string>
+    <string name="forgot_success_message">Password reset instructions have been sent to your email.</string>
+    <string name="error_forgot_failed">Could not send the password reset request.</string>
+
+    <!-- Terms Dialog -->
+    <string name="terms_dialog_title">Terms &amp; Conditions</string>
+    <string name="terms_dialog_message">Welcome to MoneySnap. By using our app, you agree to comply with the following terms:\n\n1. App usage: The app provides personal expense tracking. You are responsible for keeping your account information secure.\n\n2. Privacy: Your financial data is stored securely. We do not share your data with third parties.\n\n3. Terms updates: We may update these terms to improve the service. Updates take effect when published.\n\nThank you for choosing MoneySnap!</string>
+    <string name="terms_dialog_btn_ok">Got it</string>
 
     <!-- Validation & Error Messages -->
     <string name="error_email_empty">Please enter your email</string>
@@ -49,9 +62,259 @@
     <string name="error_password_mismatch">Passwords do not match</string>
     <string name="error_terms_not_checked">You must agree to the Terms &amp; Conditions</string>
     <string name="error_register_failed">Registration failed</string>
+    <string name="error_default">Something went wrong. Please try again.</string>
+    <string name="error_auth_invalid_credentials">Email or password is incorrect.</string>
+    <string name="error_auth_invalid_user">This account does not exist or has been disabled.</string>
+    <string name="error_auth_email_already_in_use">This email address is already registered to another account.</string>
+    <string name="error_auth_network">No internet connection. Please check your network.</string>
+    <string name="error_auth_invalid_email">The email address is invalid.</string>
+    <string name="error_auth_user_not_found">Account not found.</string>
+    <string name="error_auth_wrong_password">The password is incorrect.</string>
+    <string name="error_auth_too_many_requests">Too many requests. Please try again in a few minutes.</string>
+    <string name="error_auth_weak_password">The password is too weak. Please choose a stronger password.</string>
+    <string name="error_auth_user_disabled">This account has been disabled.</string>
+    <string name="error_auth_unknown">The transaction failed. Please try again.</string>
+    <string name="error_google_missing_id_token">Missing Google ID token</string>
+    <string name="error_save_expense_failed">Could not save the expense</string>
+    <string name="error_home_load_failed">Could not load data</string>
+    <string name="error_history_load_failed">Could not load history</string>
 
-    <!-- Terms Dialog -->
-    <string name="terms_dialog_title">Terms &amp; Conditions</string>
-    <string name="terms_dialog_message">Welcome to MoneySnap. By using our app, you agree to comply with the following terms:\n\n1. App Usage: The app provides personal expense tracking services. You are responsible for keeping your account information secure.\n\n2. Privacy: Your financial data is stored and secured absolutely. We are committed to not sharing your data with any third parties.\n\n3. Changes to Terms: We reserve the right to update these terms at any time to improve our service. Updates take effect immediately upon posting.\n\nThank you for choosing MoneySnap!</string>
-    <string name="terms_dialog_btn_ok">Got it</string>
+    <!-- Main Tabs -->
+    <string name="tab_home">Home</string>
+    <string name="tab_history">History</string>
+    <string name="tab_add">Add</string>
+    <string name="tab_stats">Stats</string>
+    <string name="tab_profile">Profile</string>
+
+    <!-- Expense Screens -->
+    <string name="home_monthly_total">Monthly total</string>
+    <string name="home_today">Today</string>
+    <string name="home_monthly_expenses">Expenses this month</string>
+    <string name="home_view_history">View history</string>
+    <string name="home_recent_snaps">Recent snaps</string>
+    <string name="home_see_all">See all</string>
+    <string name="home_empty">No expenses yet</string>
+    <string name="history_title">Spending history</string>
+    <string name="history_search_hint">Search expenses...</string>
+    <string name="history_mode_calendar">Calendar</string>
+    <string name="history_mode_search">Search</string>
+    <string name="history_search_empty">No matching expenses found</string>
+    <string name="history_search_item_meta">%1$s • %2$s</string>
+    <string name="cd_back_to_history">Back to history</string>
+    <string name="cd_back_to_profile">Back to profile</string>
+    <string name="profile_monthly_budget">Monthly budget</string>
+    <string name="profile_monthly_budget_subtitle">Set a monthly spending limit</string>
+    <string name="budget_title">Expected spending</string>
+    <string name="budget_description">Set a monthly budget so MoneySnap can help you manage your finances.</string>
+    <string name="budget_month_value">Budget for %1$s</string>
+    <string name="budget_why_title">Why set a budget?</string>
+    <string name="budget_alert_title">Spending alert</string>
+    <string name="budget_alert_description">Track when total spending reaches 80%% of the budget.</string>
+    <string name="budget_saving_title">Smarter saving</string>
+    <string name="budget_saving_description">Compare your budget with monthly spending habits.</string>
+    <string name="budget_storage_note">The budget is stored securely in this device\'s app settings.</string>
+    <string name="budget_save">Finish setup</string>
+    <string name="budget_later">Maybe later</string>
+    <string name="budget_saved">Monthly budget saved</string>
+    <string name="currency_vnd">VND</string>
+    <string name="budget_alert_channel_name">Budget alerts</string>
+    <string name="budget_alert_channel_description">Alerts when spending reaches monthly budget thresholds</string>
+    <string name="budget_alert_notification_title">%1$d%% of monthly budget used</string>
+    <string name="budget_alert_notification_content">You have spent %1$s out of a %2$s budget.</string>
+    <string name="budget_over_notification_title">Monthly budget exceeded</string>
+    <string name="budget_over_notification_content">You are %1$s over budget. Current spending is %2$s out of %3$s.</string>
+    <string name="receipt_scan_applied">Detected amount, date, and available category</string>
+    <string name="receipt_scan_no_data">No suitable amount or date was found on the receipt</string>
+    <string name="receipt_scan_failed">This receipt could not be recognized</string>
+    <string name="history_filter_all">All</string>
+    <string name="history_filter_date">Date</string>
+    <string name="history_filter_category">Category</string>
+    <string name="history_filter_amount">Amount</string>
+    <string name="history_filter_apply">Apply</string>
+    <string name="history_filter_clear">Clear filter</string>
+    <string name="history_date_title">Choose date range</string>
+    <string name="history_date_value">%1$s - %2$s</string>
+    <string name="history_category_title">Choose category</string>
+    <string name="history_amount_title">Filter by amount</string>
+    <string name="history_amount_min">Minimum</string>
+    <string name="history_amount_max">Maximum</string>
+    <string name="history_amount_invalid">Maximum must be greater than minimum</string>
+    <string name="history_amount_value">%1$d - %2$d</string>
+    <string name="history_amount_from">From %1$d</string>
+    <string name="history_amount_to">Up to %1$d</string>
+    <string name="history_empty">No spending history yet</string>
+    <string name="history_previous_month">Previous month</string>
+    <string name="history_next_month">Next month</string>
+    <string name="history_expense_label">↗ EXPENSE</string>
+    <string name="history_expense_total_value">-%1$s</string>
+    <string name="history_no_expenses_day">No expenses on this day</string>
+    <string name="history_day_expenses_title">Expenses on %1$s</string>
+    <string name="history_day_total">Total spent: %1$s</string>
+    <string name="weekday_monday">Mon</string>
+    <string name="weekday_tuesday">Tue</string>
+    <string name="weekday_wednesday">Wed</string>
+    <string name="weekday_thursday">Thu</string>
+    <string name="weekday_friday">Fri</string>
+    <string name="weekday_saturday">Sat</string>
+    <string name="weekday_sunday">Sun</string>
+    <string name="add_title">Add expense</string>
+    <string name="add_receipt_hint">Tap to select or capture a receipt</string>
+    <string name="add_pick_image">Choose image</string>
+    <string name="add_take_photo">Take photo</string>
+    <string name="add_amount_hint">Amount</string>
+    <string name="add_description_hint">Description</string>
+    <string name="add_note_hint">Note</string>
+    <string name="add_payment_method_hint">Payment method</string>
+    <string name="add_payment_method_quick">Add payment method</string>
+    <string name="add_save">Save expense</string>
+    <string name="add_saved">Expense saved. The image will sync in the background.</string>
+    <string name="error_amount_empty">Please enter an amount</string>
+    <string name="error_title_empty">Please enter a description</string>
+    <string name="placeholder_coming_soon">Coming soon</string>
+
+    <!-- Expense Categories -->
+    <string name="category_food">Food</string>
+    <string name="category_transport">Transport</string>
+    <string name="category_shopping">Shopping</string>
+    <string name="category_entertainment">Entertainment</string>
+    <string name="category_bills">Bills</string>
+    <string name="category_travel">Travel</string>
+    <string name="category_uncategorized">Uncategorized</string>
+    <string name="category_other">Other</string>
+
+    <!-- Expense Detail Bottom Sheet -->
+    <string name="detail_date_time">Date &amp; Time</string>
+    <string name="detail_payment_method">Payment method</string>
+    <string name="detail_receipt_attached">Receipt attached</string>
+    <string name="detail_view">View ></string>
+    <string name="detail_delete">Delete</string>
+    <string name="detail_edit">Edit</string>
+    <string name="detail_payment_cash">Cash</string>
+    <string name="detail_delete_placeholder">Delete will be available soon</string>
+    <string name="detail_edit_placeholder">Edit will be available soon</string>
+    <string name="date_today">Today</string>
+    <string name="date_yesterday">Yesterday</string>
+
+    <!-- Payment Methods -->
+    <string name="payment_method_cash">Cash</string>
+    <string name="payment_method_bank_transfer">Bank transfer</string>
+    <string name="payment_methods_manage_title">Payment methods</string>
+    <string name="payment_methods_profile_subtitle">Manage payment choices</string>
+    <string name="payment_methods_add">Add method</string>
+    <string name="payment_methods_add_title">Add payment method</string>
+    <string name="payment_methods_edit_title">Edit payment method</string>
+    <string name="payment_methods_name_hint">Method name</string>
+    <string name="payment_methods_save">Save</string>
+    <string name="payment_methods_cancel">Cancel</string>
+    <string name="payment_methods_close">Close</string>
+    <string name="payment_methods_edit">Edit</string>
+    <string name="payment_methods_delete">Delete</string>
+    <string name="payment_methods_delete_title">Delete method?</string>
+    <string name="payment_methods_delete_message">Are you sure you want to delete “%1$s”?</string>
+    <string name="payment_methods_default_badge">Default</string>
+    <string name="payment_methods_default_locked">Default methods cannot be edited or deleted.</string>
+    <string name="payment_methods_name_empty">Please enter a payment method name.</string>
+    <string name="payment_methods_duplicate">This payment method already exists.</string>
+    <string name="payment_methods_saved">Payment method saved.</string>
+    <string name="payment_methods_deleted">Payment method deleted.</string>
+    <string name="payment_methods_error">Could not update the payment method.</string>
+    <string name="payment_methods_permission_error">Firestore has not granted permission to sync payment methods.</string>
+    <string name="payment_methods_network_error">Could not sync payment methods. Check your connection.</string>
+
+    <!-- Delete confirmation -->
+    <string name="delete_confirm_title">Confirm deletion</string>
+    <string name="delete_confirm_message">Are you sure you want to delete this expense? This action cannot be undone.</string>
+    <string name="delete_confirm_cancel">Cancel</string>
+    <string name="delete_confirm_ok">Delete</string>
+    <string name="delete_success">Expense deleted successfully</string>
+    <string name="delete_failed">Could not delete expense</string>
+
+    <!-- Edit Expense Bottom Sheet -->
+    <string name="edit_title">Edit expense</string>
+    <string name="edit_category_label">Category</string>
+    <string name="edit_cancel">Cancel</string>
+    <string name="edit_save">Save changes</string>
+    <string name="edit_success">Expense updated</string>
+    <string name="edit_failed">Could not update expense</string>
+
+    <!-- Stats Screen -->
+    <string name="stats_title">Stats</string>
+    <string name="stats_total_month">This month</string>
+    <string name="stats_avg_daily">Avg/day</string>
+    <string name="stats_vs_last_month">vs last month</string>
+    <string name="stats_highest_cat">Top category</string>
+    <string name="stats_monthly_spending">Monthly spending</string>
+    <string name="stats_by_category">By category</string>
+    <string name="stats_weekly_trends">Weekly trends</string>
+    <string name="stats_no_data">No spending data yet</string>
+    <string name="stats_chart_day">Day %1$d</string>
+    <string name="stats_chart_today">Today</string>
+    <string name="stats_week_label">W%1$d</string>
+    <string name="stats_compact_million_suffix">m</string>
+    <string name="stats_compact_thousand_suffix">k</string>
+
+    <!-- Profile Screen -->
+    <string name="profile_default_user">User</string>
+    <string name="profile_title">Profile</string>
+    <string name="profile_account_settings">Account</string>
+    <string name="profile_personal_info">Personal information</string>
+    <string name="profile_payment_methods">Payment methods</string>
+    <string name="profile_payment_sub">Visa ending in 4242</string>
+    <string name="profile_security">Security</string>
+    <string name="profile_app_settings">App settings</string>
+    <string name="profile_notifications">Notifications</string>
+    <string name="profile_currency">Currency</string>
+    <string name="profile_dark_mode">Dark mode</string>
+    <string name="profile_language">Language</string>
+    <string name="profile_support_legal">Support &amp; Legal</string>
+    <string name="profile_help_center">Help center</string>
+    <string name="profile_privacy_policy">Privacy policy</string>
+    <string name="profile_about">About MoneySnap</string>
+    <string name="profile_logout">Log out</string>
+    <string name="profile_logout_confirm_title">Confirm logout</string>
+    <string name="profile_logout_confirm_message">Are you sure you want to log out?</string>
+    <string name="profile_logout_cancel">Cancel</string>
+    <string name="profile_logout_ok">Log out</string>
+    <string name="profile_app_version">MoneySnap · Version 1.0</string>
+    <string name="profile_language_vi_value">Tiếng Việt</string>
+    <string name="profile_language_en_value">English</string>
+    <string name="profile_language_dialog_title">Select language</string>
+
+    <!-- Session dialog -->
+    <string name="session_error_title">Something went wrong</string>
+    <string name="session_error_message">Your session has expired. Please log in again.</string>
+    <string name="session_error_action">Log in again</string>
+
+    <!-- Content descriptions -->
+    <string name="cd_user_profile">User profile</string>
+    <string name="cd_edit_profile_photo">Edit profile photo</string>
+    <string name="cd_app_logo">MoneySnap logo</string>
+    <string name="cd_camera_icon">Camera icon</string>
+    <string name="cd_analysis_icon">Analysis icon</string>
+    <string name="cd_wallet_icon">Wallet icon</string>
+    <string name="cd_globe_icon">Globe icon</string>
+    <string name="cd_category">Category</string>
+    <string name="cd_date">Date</string>
+    <string name="cd_payment">Payment</string>
+    <string name="cd_receipt">Receipt</string>
+    <string name="cd_receipt_photo">Receipt photo</string>
+    <string name="cd_add_payment_method">Add payment method</string>
+
+    <!-- Avatar & personal info -->
+    <string name="avatar_options_title">Profile photo</string>
+    <string name="avatar_view">View photo</string>
+    <string name="avatar_change">Change photo</string>
+    <string name="avatar_remove">Remove photo</string>
+    <string name="avatar_none">No profile photo yet</string>
+    <string name="avatar_updated">Profile photo updated</string>
+    <string name="avatar_removed">Profile photo removed</string>
+    <string name="avatar_remove_confirm_title">Remove profile photo?</string>
+    <string name="avatar_remove_confirm_message">The photo will be removed from your account on all devices.</string>
+    <string name="avatar_remove_confirm_ok">Remove</string>
+    <string name="personal_info_name_label">Full name</string>
+    <string name="personal_info_email_label">Email</string>
+    <string name="personal_info_email_readonly">Email cannot be changed</string>
+    <string name="personal_info_save">Save</string>
+    <string name="personal_info_saved">Information saved</string>
+    <string name="profile_action_failed">Action failed. Please check your connection.</string>
 </resources>

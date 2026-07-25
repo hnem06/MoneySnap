@@ -1,0 +1,40 @@
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.devpro58.hnem06.moneysnap.presentation.home.HomeFragment"
+        android:label="@string/tab_home" />
+
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.devpro58.hnem06.moneysnap.presentation.history.HistoryFragment"
+        android:label="@string/tab_history" />
+
+    <fragment
+        android:id="@+id/addExpenseFragment"
+        android:name="com.devpro58.hnem06.moneysnap.presentation.expense.add.AddExpenseFragment"
+        android:label="@string/tab_add">
+        <argument
+            android:name="spentAtMillis"
+            android:defaultValue="-1L"
+            app:argType="long" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/statsFragment"
+        android:name="com.devpro58.hnem06.moneysnap.presentation.stats.StatsFragment"
+        android:label="@string/tab_stats" />
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.devpro58.hnem06.moneysnap.presentation.profile.ProfileFragment"
+        android:label="@string/tab_profile" />
+
+    <fragment
+        android:id="@+id/budgetFragment"
+        android:name="com.devpro58.hnem06.moneysnap.presentation.budget.BudgetFragment"
+        android:label="@string/budget_title" />
+</navigation>

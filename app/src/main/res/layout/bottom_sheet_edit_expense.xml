@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_bottom_sheet"
+    android:orientation="vertical"
+    android:paddingBottom="24dp">
+
+    <!-- Drag handle -->
+    <View
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/bg_drag_handle" />
+
+    <!-- Sheet title -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:text="@string/edit_title"
+        android:textColor="#111827"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <!-- Amount input -->
+    <EditText
+        android:id="@+id/editAmountInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="20dp"
+        android:background="@android:color/transparent"
+        android:gravity="start"
+        android:hint="@string/add_amount_hint"
+        android:inputType="number"
+        android:textColor="@color/accent_green"
+        android:textColorHint="#9CA3AF"
+        android:textSize="32sp"
+        android:textStyle="bold" />
+
+    <!-- Description input -->
+    <EditText
+        android:id="@+id/editTitleInput"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_input_rounded"
+        android:hint="@string/add_description_hint"
+        android:inputType="textCapSentences"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:singleLine="true"
+        android:textColor="#111827"
+        android:textSize="14sp" />
+
+    <!-- Category label -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/edit_category_label"
+        android:textColor="#374151"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <!-- Category chips -->
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/editCategoryChipGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="8dp"
+        app:singleSelection="true">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/editCategoryFood"
+            style="@style/Widget.App.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/category_food" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/editCategoryTransport"
+            style="@style/Widget.App.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/category_transport" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/editCategoryShopping"
+            style="@style/Widget.App.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/category_shopping" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/editCategoryEntertainment"
+            style="@style/Widget.App.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/category_entertainment" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/editCategoryBills"
+            style="@style/Widget.App.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/category_bills" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/editCategoryOther"
+            style="@style/Widget.App.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/category_other" />
+    </com.google.android.material.chip.ChipGroup>
+
+    <!-- Payment method -->
+    <EditText
+        android:id="@+id/editPaymentMethodInput"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/bg_input_rounded"
+        android:hint="@string/add_payment_method_hint"
+        android:inputType="textCapSentences"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:singleLine="true"
+        android:textColor="#111827"
+        android:textSize="14sp" />
+
+    <!-- Note -->
+    <EditText
+        android:id="@+id/editNoteInput"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_input_rounded"
+        android:gravity="top"
+        android:hint="@string/add_note_hint"
+        android:inputType="textMultiLine"
+        android:padding="16dp"
+        android:textColor="#111827"
+        android:textSize="14sp" />
+
+    <!-- Buttons row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingHorizontal="24dp">
+
+        <!-- Cancel -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/editCancelButton"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:text="@string/edit_cancel"
+            android:textColor="#374151"
+            app:cornerRadius="26dp"
+            app:strokeColor="#D1D5DB"
+            app:strokeWidth="1dp" />
+
+        <!-- Save -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/editSaveButton"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1.5"
+            android:backgroundTint="@color/accent_green"
+            android:text="@string/edit_save"
+            android:textColor="@android:color/white"
+            app:cornerRadius="26dp"
+            app:icon="@drawable/ic_check_circle"
+            app:iconGravity="textStart"
+            app:iconSize="20dp"
+            app:iconTint="@android:color/white" />
+    </LinearLayout>
+</LinearLayout>

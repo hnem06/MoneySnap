@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_gray_bg"
+    android:orientation="vertical">
+
+    <!-- Sticky header -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/card_bg"
+        android:gravity="center"
+        android:paddingVertical="16dp"
+        android:text="@string/profile_title"
+        android:textColor="@color/text_dark"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/border_gray" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:paddingBottom="100dp"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp">
+
+            <!-- Avatar + user info -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:paddingTop="28dp"
+                android:paddingBottom="8dp">
+
+                <FrameLayout
+                    android:layout_width="128dp"
+                    android:layout_height="128dp">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/profileAvatarLarge"
+                        android:layout_width="128dp"
+                        android:layout_height="128dp"
+                        android:background="@color/soft_green"
+                        android:elevation="4dp"
+                        android:padding="12dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/user_profile_placeholder"
+                        app:shapeAppearanceOverlay="@style/ShapeAppearance.App.Circle"
+                        app:strokeColor="@color/white"
+                        app:strokeWidth="4dp" />
+
+                    <ImageView
+                        android:id="@+id/btnEditAvatar"
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:layout_gravity="bottom|end"
+                        android:layout_marginEnd="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:background="@drawable/bg_edit_badge"
+                        android:contentDescription="@string/cd_edit_profile_photo"
+                        android:elevation="6dp"
+                        android:padding="7dp"
+                        android:src="@drawable/ic_detail_edit"
+                        app:tint="@color/white" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/profileUserName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:textColor="@color/text_dark"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/profileUserEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/text_muted"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <!-- ACCOUNT SETTINGS -->
+            <TextView
+                style="@style/App.Profile.SectionHeader"
+                android:text="@string/profile_account_settings" />
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/App.Profile.SectionCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <include
+                        android:id="@+id/rowPersonalInfo"
+                        layout="@layout/item_profile_row" />
+
+                    <View style="@style/App.Profile.Divider" />
+
+                    <include
+                        android:id="@+id/rowPaymentMethods"
+                        layout="@layout/item_profile_row" />
+
+                    <View style="@style/App.Profile.Divider" />
+
+                    <include
+                        android:id="@+id/rowSecurity"
+                        layout="@layout/item_profile_row" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- APP SETTINGS -->
+            <TextView
+                style="@style/App.Profile.SectionHeader"
+                android:text="@string/profile_app_settings" />
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/App.Profile.SectionCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!-- Notifications (switch) -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="64dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="16dp">
+
+                        <FrameLayout
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/bg_icon_square">
+
+                            <ImageView
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_profile_notification"
+                                app:tint="@color/icon_neutral" />
+                        </FrameLayout>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="14dp"
+                            android:layout_weight="1"
+                            android:text="@string/profile_notifications"
+                            android:textColor="@color/text_dark"
+                            android:textSize="15sp" />
+
+                        <com.google.android.material.materialswitch.MaterialSwitch
+                            android:id="@+id/switchNotifications"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            app:thumbTint="@color/white"
+                            app:trackTint="@color/switch_track_tint" />
+                    </LinearLayout>
+
+                    <View style="@style/App.Profile.Divider" />
+
+                    <include
+                        android:id="@+id/rowCurrency"
+                        layout="@layout/item_profile_row" />
+
+                    <View style="@style/App.Profile.Divider" />
+
+                    <include
+                        android:id="@+id/rowMonthlyBudget"
+                        layout="@layout/item_profile_row" />
+
+                    <View style="@style/App.Profile.Divider" />
+
+                    <!-- Dark mode (switch) -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="64dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="16dp">
+
+                        <FrameLayout
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/bg_icon_square">
+
+                            <ImageView
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_profile_darkmode"
+                                app:tint="@color/icon_neutral" />
+                        </FrameLayout>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="14dp"
+                            android:layout_weight="1"
+                            android:text="@string/profile_dark_mode"
+                            android:textColor="@color/text_dark"
+                            android:textSize="15sp" />
+
+                        <com.google.android.material.materialswitch.MaterialSwitch
+                            android:id="@+id/switchDarkMode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="false"
+                            app:thumbTint="@color/white"
+                            app:trackTint="@color/switch_track_tint" />
+                    </LinearLayout>
+
+                    <View style="@style/App.Profile.Divider" />
+
+                    <include
+                        android:id="@+id/rowLanguage"
+                        layout="@layout/item_profile_row" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- SUPPORT & LEGAL -->
+            <TextView
+                style="@style/App.Profile.SectionHeader"
+                android:text="@string/profile_support_legal" />
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/App.Profile.SectionCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <include
+                        android:id="@+id/rowHelpCenter"
+                        layout="@layout/item_profile_row" />
+
+                    <View style="@style/App.Profile.Divider" />
+
+                    <include
+                        android:id="@+id/rowPrivacyPolicy"
+                        layout="@layout/item_profile_row" />
+
+                    <View style="@style/App.Profile.Divider" />
+
+                    <include
+                        android:id="@+id/rowAbout"
+                        layout="@layout/item_profile_row" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Log Out -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnLogout"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="24dp"
+                android:text="@string/profile_logout"
+                android:textColor="@color/danger_red"
+                android:textStyle="bold"
+                app:cornerRadius="16dp"
+                app:icon="@drawable/ic_profile_logout"
+                app:iconGravity="textStart"
+                app:iconSize="20dp"
+                app:iconTint="@color/danger_red"
+                app:rippleColor="#1FDC2626"
+                app:strokeColor="@color/danger_red"
+                app:strokeWidth="2dp" />
+
+            <!-- Version -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center"
+                android:text="@string/profile_app_version"
+                android:textColor="@color/text_muted"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
