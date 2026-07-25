@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -16,19 +17,19 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 
-import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.FirebaseAuth
-
 import com.devpro58.hnem06.moneysnap.R
+import com.devpro58.hnem06.moneysnap.core.utils.AuthExceptionHandler
 import com.devpro58.hnem06.moneysnap.databinding.FragmentLoginBinding
 import com.devpro58.hnem06.moneysnap.presentation.main.MainActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LoginFragment : Fragment() {
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var auth: FirebaseAuth
+    private lateinit var viewModel: LoginViewModel
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var googleSignInLauncher: ActivityResultLauncher<Intent>
 
@@ -42,14 +43,26 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        auth = FirebaseAuth.getInstance()
+        viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
 
         googleSignInLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             val data: Intent? = result.data
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
                 val account = task.getResult(ApiException::class.java)!!
-                firebaseAuthWithGoogle(account.idToken!!)
+                val idToken = account.idToken
+                if (idToken.isNullOrBlank()) {
+                    Toast.makeText(
+                        context,
+                        getString(
+                            R.string.error_google_login,
+                            getString(R.string.error_google_missing_id_token)
+                        ),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    viewModel.loginWithGoogle(idToken)
+                }
             } catch (e: ApiException) {
                 Toast.makeText(context, getString(R.string.error_google_login, e.localizedMessage), Toast.LENGTH_SHORT).show()
             }
@@ -61,6 +74,8 @@ class LoginFragment : Fragment() {
             .build()
         googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
 
+        observeViewModel()
+
         binding.tvSwitchToRegister.text = android.text.Html.fromHtml(
             getString(R.string.switch_to_register),
             android.text.Html.FROM_HTML_MODE_LEGACY
@@ -68,6 +83,10 @@ class LoginFragment : Fragment() {
 
         binding.tvSwitchToRegister.setOnClickListener {
             (activity as? AuthScreen)?.switchToRegister()
+        }
+
+        binding.tvForgotPassword.setOnClickListener {
+            (activity as? AuthScreen)?.switchToForgot()
         }
 
         binding.btnLogin.setOnClickListener {
@@ -81,17 +100,7 @@ class LoginFragment : Fragment() {
                 binding.edtPassword.error = getString(R.string.error_password_empty)
                 binding.edtPassword.requestFocus()
             } else {
-                binding.btnLogin.isEnabled = false
-                auth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(requireActivity()) { task ->
-                        if (task.isSuccessful) {
-                            navigateToMainScreen()
-                        } else {
-                            binding.btnLogin.isEnabled = true
-                            val errorMessage = task.exception?.localizedMessage ?: getString(R.string.error_login_failed)
-                            Toast.makeText(context, getString(R.string.error_with_message, errorMessage), Toast.LENGTH_LONG).show()
-                        }
-                    }
+                viewModel.loginWithEmail(email, password)
             }
         }
 
@@ -101,17 +110,24 @@ class LoginFragment : Fragment() {
         }
     }
 
-    private fun firebaseAuthWithGoogle(idToken: String) {
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
-        auth.signInWithCredential(credential)
-            .addOnCompleteListener(requireActivity()) { task ->
-                if (task.isSuccessful) {
-                    navigateToMainScreen()
-                } else {
-                    val error = task.exception?.localizedMessage ?: getString(R.string.error_firebase_login_failed)
-                    Toast.makeText(context, getString(R.string.error_with_message, error), Toast.LENGTH_LONG).show()
+    private fun observeViewModel() {
+        viewModel.uiState.observe(viewLifecycleOwner) { state ->
+            val isLoading = state is AuthUiState.Loading
+            binding.btnLogin.isEnabled = !isLoading
+            binding.btnGoogle.isEnabled = !isLoading
+
+            when (state) {
+                AuthUiState.Authenticated -> navigateToMainScreen()
+                is AuthUiState.Error -> {
+                    val error = AuthExceptionHandler.getErrorMessage(requireContext(), state.throwable)
+                    Toast.makeText(context, error, Toast.LENGTH_LONG).show()
+                    viewModel.resetState()
                 }
+                AuthUiState.Idle,
+                AuthUiState.Loading,
+                AuthUiState.PasswordResetEmailSent -> Unit
             }
+        }
     }
 
     private fun navigateToMainScreen() {

@@ -1,0 +1,17 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+  <!-- The circular arrow -->
+  <path
+      android:fillColor="@color/text_muted"
+      android:pathData="M12,4V1L8,5l4,4V6c3.87,0 7,3.13 7,7s-3.13,7 -7,7-7,-3.13 -7,-7H3c0,4.97 4.03,9 9,9s9,-4.03 9,-9-4.03,-9 -9,-9z"/>
+  <!-- The lock inside -->
+  <path
+      android:fillColor="@color/text_muted"
+      android:pathData="M12,10.5c-0.83,0 -1.5,0.67 -1.5,1.5v0.5h3v-0.5c0,-0.83 -0.67,-1.5 -1.5,-1.5z"/>
+  <path
+      android:fillColor="@color/text_muted"
+      android:pathData="M9.5,12.5h5v4h-5z"/>
+</vector>

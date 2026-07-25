@@ -7,17 +7,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.UserProfileChangeRequest
+import androidx.lifecycle.ViewModelProvider
 import com.devpro58.hnem06.moneysnap.R
+import com.devpro58.hnem06.moneysnap.core.utils.AuthExceptionHandler
 import com.devpro58.hnem06.moneysnap.databinding.FragmentRegisterBinding
 import com.devpro58.hnem06.moneysnap.presentation.main.MainActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RegisterFragment : Fragment() {
 
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
-    private lateinit var auth: FirebaseAuth
+    private lateinit var viewModel: RegisterViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,7 +31,8 @@ class RegisterFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        auth = FirebaseAuth.getInstance()
+        viewModel = ViewModelProvider(this)[RegisterViewModel::class.java]
+        observeViewModel()
 
         binding.tvSwitchToLogin.text = android.text.Html.fromHtml(
             getString(R.string.switch_to_login),
@@ -88,28 +91,33 @@ class RegisterFragment : Fragment() {
 
         binding.btnRegister.isEnabled = false
 
-        auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener(requireActivity()) { task ->
-                if (task.isSuccessful) {
-                    val user = auth.currentUser
-                    val profileUpdates = UserProfileChangeRequest.Builder()
-                        .setDisplayName(name)
-                        .build()
+        viewModel.register(name, email, password)
+    }
 
-                    user?.updateProfile(profileUpdates)
-                        ?.addOnCompleteListener {
-                            navigateToMainScreen()
-                        }
-                } else {
-                    binding.btnRegister.isEnabled = true
-                    val errorMessage = task.exception?.localizedMessage ?: getString(R.string.error_register_failed)
-                    Toast.makeText(context, getString(R.string.error_with_message, errorMessage), Toast.LENGTH_LONG).show()
+    private fun observeViewModel() {
+        viewModel.uiState.observe(viewLifecycleOwner) { state ->
+            binding.btnRegister.isEnabled = state !is AuthUiState.Loading
+
+            when (state) {
+                AuthUiState.Authenticated -> navigateToMainScreen()
+                is AuthUiState.Error -> {
+                    val errorMessage = AuthExceptionHandler.getErrorMessage(
+                        requireContext(),
+                        state.throwable
+                    )
+                    Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
+                    viewModel.resetState()
                 }
+                AuthUiState.Idle,
+                AuthUiState.Loading,
+                AuthUiState.PasswordResetEmailSent -> Unit
             }
+        }
     }
 
     private fun navigateToMainScreen() {
         val intent = Intent(activity, MainActivity::class.java)
+            .putExtra(MainActivity.EXTRA_OPEN_BUDGET_SETUP, true)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         activity?.finish()
