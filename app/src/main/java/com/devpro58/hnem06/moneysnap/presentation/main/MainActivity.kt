@@ -6,6 +6,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -43,6 +44,10 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigation.setupWithNavController(navHost.navController)
         binding.bottomNavigation.labelVisibilityMode =
             com.google.android.material.navigation.NavigationBarView.LABEL_VISIBILITY_LABELED
+
+        viewModel.isOnline.observe(this) { online ->
+            binding.offlineBanner.isVisible = !online
+        }
 
         if (savedInstanceState == null && intent.getBooleanExtra(EXTRA_OPEN_BUDGET_SETUP, false)) {
             intent.removeExtra(EXTRA_OPEN_BUDGET_SETUP)

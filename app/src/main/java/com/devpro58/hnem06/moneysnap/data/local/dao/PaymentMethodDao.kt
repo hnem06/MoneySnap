@@ -58,6 +58,10 @@ interface PaymentMethodDao {
     @Query("DELETE FROM payment_methods WHERE userId = :userId AND builtInKey IS NULL")
     suspend fun deleteAllCustomByUser(userId: String)
 
+    /** Includes built-in methods — used on sign-out, where nothing for this user should remain. */
+    @Query("DELETE FROM payment_methods WHERE userId = :userId")
+    suspend fun deleteAllByUser(userId: String)
+
     @Query(
         "DELETE FROM payment_methods WHERE userId = :userId " +
             "AND builtInKey IS NULL AND id NOT IN (:remoteIds)"

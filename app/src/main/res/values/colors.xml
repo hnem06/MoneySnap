@@ -47,4 +47,9 @@
     <color name="calendar_today_bg">#FFF7D6</color>
     <color name="calendar_today_border">#FACC15</color>
     <color name="calendar_today_accent">#D97706</color>
+
+    <!-- Offline banner. Amber, not red: being offline is a state to be aware of, not an error —
+         the app keeps working and syncs later. -->
+    <color name="offline_banner_bg">#FEF3C7</color>
+    <color name="offline_banner_text">#92400E</color>
 </resources>

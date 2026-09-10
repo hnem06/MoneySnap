@@ -1,8 +1,12 @@
 package com.devpro58.hnem06.moneysnap.presentation.expense.add
 
+import android.Manifest
 import android.app.DatePickerDialog
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +15,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.addCallback
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -62,6 +67,26 @@ class AddExpenseFragment : Fragment() {
         }
     }
 
+    /**
+     * CAMERA is declared in the manifest, so ACTION_IMAGE_CAPTURE throws SecurityException when
+     * it has not been granted. It used to be requested once on the Welcome screen — which ignored
+     * the result and is never shown to returning users — so any user who declined, or who simply
+     * installed before that screen existed, crashed on "Take photo".
+     */
+    private val cameraPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if (granted) {
+            launchCamera()
+        } else if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
+            Toast.makeText(requireContext(), R.string.camera_permission_denied, Toast.LENGTH_LONG)
+                .show()
+        } else {
+            // Permanently denied — the system dialog will not appear again, so offer Settings.
+            showCameraPermissionSettingsDialog()
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -102,9 +127,15 @@ class AddExpenseFragment : Fragment() {
             pickImageLauncher.launch("image/*")
         }
         binding.takePhotoButton.setOnClickListener {
-            val uri = createCameraReceiptUri()
-            cameraReceiptUri = uri
-            takePictureLauncher.launch(uri)
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.CAMERA
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                launchCamera()
+            } else {
+                cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+            }
         }
         binding.saveExpenseButton.setOnClickListener {
             submitExpense()
@@ -374,6 +405,28 @@ class AddExpenseFragment : Fragment() {
             ExpenseCategory.Other -> R.id.categoryOtherChip
         }
         binding.categoryChipGroup.check(chipId)
+    }
+
+    private fun launchCamera() {
+        val uri = createCameraReceiptUri()
+        cameraReceiptUri = uri
+        takePictureLauncher.launch(uri)
+    }
+
+    private fun showCameraPermissionSettingsDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.camera_permission_rationale_title)
+            .setMessage(R.string.camera_permission_rationale_message)
+            .setNegativeButton(R.string.camera_permission_cancel, null)
+            .setPositiveButton(R.string.camera_permission_open_settings) { _, _ ->
+                startActivity(
+                    Intent(
+                        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                        Uri.fromParts("package", requireContext().packageName, null)
+                    )
+                )
+            }
+            .show()
     }
 
     private fun createCameraReceiptUri(): Uri {

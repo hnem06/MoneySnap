@@ -214,6 +214,7 @@ class HomeFragment : Fragment() {
             .setExpense(expense)
             .setOnDeleteListener(viewModel::deleteExpense)
             .setOnEditListener(::showEditSheet)
+            .setOnRetrySyncListener(viewModel::retrySync)
             .show(childFragmentManager, ExpenseDetailBottomSheet.TAG)
     }
 

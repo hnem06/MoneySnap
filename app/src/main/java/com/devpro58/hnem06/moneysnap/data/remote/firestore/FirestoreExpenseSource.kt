@@ -18,8 +18,15 @@ class FirestoreExpenseSource @Inject constructor(
 ) {
 
     /**
-     * Realtime stream of every expense stored remotely for [userId].
+     * Realtime stream of every expense stored **server-side** for [userId].
      * Emits the full list on each snapshot; the listener is removed when the flow closes.
+     *
+     * Cache-only snapshots are dropped on purpose. Firestore's offline persistence replays the
+     * local cache before the server responds, and that cache is empty after an app-data clear or
+     * a fresh install even when Room still holds the user's expenses. Feeding such a snapshot to
+     * `reconcile()` would make it delete every local row that has no pending local change — i.e.
+     * silently wipe the user's history. Offline, Room is the source of truth and no reconcile is
+     * needed; the listener re-emits from the server as soon as connectivity returns.
      */
     fun observeExpenses(userId: String): Flow<List<ExpenseEntity>> = callbackFlow {
         val registration = firestore.collection("users")
@@ -30,7 +37,7 @@ class FirestoreExpenseSource @Inject constructor(
                     close(error)
                     return@addSnapshotListener
                 }
-                if (snapshot == null) return@addSnapshotListener
+                if (snapshot == null || snapshot.metadata.isFromCache) return@addSnapshotListener
                 trySend(snapshot.documents.mapNotNull { it.toExpenseEntity() })
             }
         awaitClose { registration.remove() }
@@ -61,6 +68,14 @@ class FirestoreExpenseSource @Inject constructor(
         )
     }
 
+    /**
+     * Writes the expense to `users/{uid}/expenses/{id}`.
+     *
+     * [ExpenseEntity.syncStatus] is intentionally **not** part of the payload: it describes this
+     * device's upload progress, not the expense. It was write-only noise anyway — [toExpenseEntity]
+     * already hardcodes `Synced` when reading a document back. Keep the key set in sync with the
+     * Firestore rules validation.
+     */
     suspend fun upsertExpense(expense: ExpenseEntity) {
         val data = mapOf(
             "id" to expense.id,
@@ -73,7 +88,6 @@ class FirestoreExpenseSource @Inject constructor(
             "note" to expense.note,
             "remoteReceiptUrl" to expense.remoteReceiptUrl,
             "receiptUploadStatus" to expense.receiptUploadStatus,
-            "syncStatus" to expense.syncStatus,
             "spentAtMillis" to expense.spentAtMillis,
             "createdAtMillis" to expense.createdAtMillis,
             "updatedAtMillis" to expense.updatedAtMillis

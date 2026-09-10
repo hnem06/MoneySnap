@@ -1,5 +1,6 @@
 package com.devpro58.hnem06.moneysnap.core.di
 
+import com.devpro58.hnem06.moneysnap.data.repository.ConnectivityRepositoryImpl
 import com.devpro58.hnem06.moneysnap.data.repository.ExpenseRepositoryImpl
 import com.devpro58.hnem06.moneysnap.data.repository.FirebaseAuthRepository
 import com.devpro58.hnem06.moneysnap.data.repository.PaymentMethodRepositoryImpl
@@ -9,6 +10,7 @@ import com.devpro58.hnem06.moneysnap.data.receipt.MlKitReceiptRecognitionReposit
 import com.devpro58.hnem06.moneysnap.data.sync.ExpenseSyncScheduler
 import com.devpro58.hnem06.moneysnap.data.sync.WorkManagerExpenseSyncScheduler
 import com.devpro58.hnem06.moneysnap.domain.repository.AuthRepository
+import com.devpro58.hnem06.moneysnap.domain.repository.ConnectivityRepository
 import com.devpro58.hnem06.moneysnap.domain.repository.ExpenseRepository
 import com.devpro58.hnem06.moneysnap.domain.repository.OnboardingRepository
 import com.devpro58.hnem06.moneysnap.domain.repository.PaymentMethodRepository
@@ -57,4 +59,9 @@ abstract class RepositoryModule {
     abstract fun bindReceiptRecognitionRepository(
         repository: MlKitReceiptRecognitionRepository
     ): ReceiptRecognitionRepository
+
+    @Binds
+    abstract fun bindConnectivityRepository(
+        repository: ConnectivityRepositoryImpl
+    ): ConnectivityRepository
 }

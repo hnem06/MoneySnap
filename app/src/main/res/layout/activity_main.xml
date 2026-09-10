@@ -20,6 +20,28 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/main_nav_graph" />
 
+    <!-- Sits above the nav host rather than pushing it down, so appearing/disappearing never
+         reflows the screen under the user's finger. -->
+    <TextView
+        android:id="@+id/offlineBanner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/offline_banner_bg"
+        android:drawablePadding="8dp"
+        android:gravity="center"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        android:text="@string/offline_banner_message"
+        android:textAppearance="?attr/textAppearanceLabelLarge"
+        android:textColor="@color/offline_banner_text"
+        android:visibility="gone"
+        app:drawableStartCompat="@drawable/ic_cloud_off"
+        app:drawableTint="@color/offline_banner_text"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible" />
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
         android:layout_width="0dp"

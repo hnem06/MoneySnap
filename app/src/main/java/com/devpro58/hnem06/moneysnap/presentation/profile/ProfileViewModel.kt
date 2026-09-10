@@ -13,6 +13,7 @@ import com.devpro58.hnem06.moneysnap.domain.model.PaymentMethodSyncError
 import com.devpro58.hnem06.moneysnap.domain.model.PaymentMethodSyncException
 import com.devpro58.hnem06.moneysnap.domain.usecase.auth.GetCurrentUserUseCase
 import com.devpro58.hnem06.moneysnap.domain.usecase.auth.RemoveAvatarUseCase
+import com.devpro58.hnem06.moneysnap.domain.usecase.auth.SignOutUseCase
 import com.devpro58.hnem06.moneysnap.domain.usecase.auth.UpdateAvatarUseCase
 import com.devpro58.hnem06.moneysnap.domain.usecase.auth.UpdateDisplayNameUseCase
 import com.devpro58.hnem06.moneysnap.domain.usecase.payment.AddPaymentMethodUseCase
@@ -39,7 +40,8 @@ class ProfileViewModel @Inject constructor(
     private val deletePaymentMethodUseCase: DeletePaymentMethodUseCase,
     private val updateDisplayNameUseCase: UpdateDisplayNameUseCase,
     private val updateAvatarUseCase: UpdateAvatarUseCase,
-    private val removeAvatarUseCase: RemoveAvatarUseCase
+    private val removeAvatarUseCase: RemoveAvatarUseCase,
+    private val signOutUseCase: SignOutUseCase
 ) : ViewModel() {
 
     val paymentMethods: LiveData<List<PaymentMethod>> =
@@ -47,6 +49,26 @@ class ProfileViewModel @Inject constructor(
 
     private val _accountState = MutableLiveData(ProfileAccountState(user = getCurrentUser()))
     val accountState: LiveData<ProfileAccountState> = _accountState
+
+    private val _signedOut = MutableLiveData<Boolean>()
+
+    /** Emits once the account has been signed out and its local data wiped. */
+    val signedOut: LiveData<Boolean> = _signedOut
+
+    /**
+     * Sign-out now clears Room, cached receipts and account settings, so it is suspending and
+     * the screen must wait for it. Previously the fragment called `authRepository.signOut()`
+     * directly and navigated away immediately, which both bypassed this ViewModel and left the
+     * previous account's data on the device.
+     */
+    fun signOut() {
+        viewModelScope.launch {
+            runCatching { signOutUseCase() }
+            // Navigate regardless: the session is gone either way, and stranding the user on a
+            // half-signed-out Profile screen would be worse than a stale cache.
+            _signedOut.value = true
+        }
+    }
 
     fun changeAvatar(localImageUri: String) = runAccountAction(R.string.avatar_updated) {
         updateAvatarUseCase(localImageUri)

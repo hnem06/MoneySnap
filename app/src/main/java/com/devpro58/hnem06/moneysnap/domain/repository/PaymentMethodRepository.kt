@@ -9,4 +9,7 @@ interface PaymentMethodRepository {
     suspend fun addPaymentMethod(userId: String, name: String): PaymentMethod
     suspend fun updatePaymentMethod(methodId: String, name: String)
     suspend fun deletePaymentMethod(methodId: String)
+
+    /** Drops this device's cached payment methods for a user. Remote data is untouched. */
+    suspend fun clearLocalData(userId: String)
 }

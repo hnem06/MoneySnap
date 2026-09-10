@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.devpro58.hnem06.moneysnap.domain.model.Expense
 import com.devpro58.hnem06.moneysnap.domain.usecase.expense.DeleteExpenseUseCase
 import com.devpro58.hnem06.moneysnap.domain.usecase.expense.GetHomeDashboardUseCase
+import com.devpro58.hnem06.moneysnap.domain.usecase.expense.RetryReceiptUploadUseCase
 import com.devpro58.hnem06.moneysnap.domain.usecase.expense.UpdateExpenseUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -19,7 +20,8 @@ import kotlinx.coroutines.launch
 class HomeViewModel @Inject constructor(
     getHomeDashboard: GetHomeDashboardUseCase,
     private val deleteExpenseUseCase: DeleteExpenseUseCase,
-    private val updateExpenseUseCase: UpdateExpenseUseCase
+    private val updateExpenseUseCase: UpdateExpenseUseCase,
+    private val retryReceiptUploadUseCase: RetryReceiptUploadUseCase
 ) : ViewModel() {
 
     val uiState: LiveData<HomeUiState> =
@@ -46,6 +48,13 @@ class HomeViewModel @Inject constructor(
                 action = HomeExpenseAction.Update,
                 result = runCatching { updateExpenseUseCase(expense) }
             )
+        }
+    }
+
+    /** Re-queues a failed upload. Fire-and-forget: the outcome shows up as a status change. */
+    fun retrySync(expenseId: String) {
+        viewModelScope.launch {
+            runCatching { retryReceiptUploadUseCase(expenseId) }
         }
     }
 

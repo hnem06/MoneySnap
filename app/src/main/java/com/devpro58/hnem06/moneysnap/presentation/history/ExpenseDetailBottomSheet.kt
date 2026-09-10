@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import coil.load
 import com.devpro58.hnem06.moneysnap.R
 import com.devpro58.hnem06.moneysnap.core.utils.DateLabelFormatter
@@ -14,6 +15,7 @@ import com.devpro58.hnem06.moneysnap.core.utils.MoneyFormatter
 import com.devpro58.hnem06.moneysnap.core.utils.localizedLabel
 import com.devpro58.hnem06.moneysnap.domain.model.Expense
 import com.devpro58.hnem06.moneysnap.domain.model.ExpenseCategory
+import com.devpro58.hnem06.moneysnap.domain.model.ExpenseSyncStatus
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -29,8 +31,14 @@ class ExpenseDetailBottomSheet : BottomSheetDialogFragment() {
     private var expense: Expense? = null
     private var onDelete: ((String) -> Unit)? = null
     private var onEdit: ((Expense) -> Unit)? = null
+    private var onRetrySync: ((String) -> Unit)? = null
 
     override fun getTheme(): Int = R.style.App_BottomSheet_Transparent
+
+    fun setOnRetrySyncListener(listener: (String) -> Unit): ExpenseDetailBottomSheet {
+        this.onRetrySync = listener
+        return this
+    }
 
     fun setExpense(expense: Expense): ExpenseDetailBottomSheet {
         this.expense = expense
@@ -100,6 +108,8 @@ class ExpenseDetailBottomSheet : BottomSheetDialogFragment() {
             receiptSection.visibility = View.GONE
         }
 
+        bindSyncStatus(view, exp)
+
         // ---------- DELETE button ----------
         view.findViewById<MaterialButton>(R.id.btnDelete).setOnClickListener {
             MaterialAlertDialogBuilder(requireContext())
@@ -117,6 +127,42 @@ class ExpenseDetailBottomSheet : BottomSheetDialogFragment() {
         view.findViewById<MaterialButton>(R.id.btnEdit).setOnClickListener {
             dismiss()
             onEdit?.invoke(exp)
+        }
+    }
+
+    /**
+     * Shows sync state only when there is something to say. `Retry` is offered exclusively for
+     * [ExpenseSyncStatus.Failed]: a row that is merely queued will be picked up on its own, and
+     * a button that re-queues an already-queued item just teaches the user it does nothing.
+     */
+    private fun bindSyncStatus(view: View, exp: Expense) {
+        val section = view.findViewById<LinearLayout>(R.id.detailSyncSection)
+        val statusText = view.findViewById<TextView>(R.id.detailSyncStatus)
+        val retryButton = view.findViewById<MaterialButton>(R.id.btnRetrySync)
+
+        val messageRes = when (exp.syncStatus) {
+            ExpenseSyncStatus.Failed -> R.string.sync_status_failed
+            ExpenseSyncStatus.PendingUpload,
+            ExpenseSyncStatus.LocalOnly -> R.string.sync_status_pending
+            // Synced needs no note; PendingDelete rows are filtered out before they reach the UI.
+            ExpenseSyncStatus.Synced,
+            ExpenseSyncStatus.PendingDelete -> null
+        }
+
+        if (messageRes == null) {
+            section.visibility = View.GONE
+            return
+        }
+
+        section.visibility = View.VISIBLE
+        statusText.text = getString(messageRes)
+        statusText.contentDescription = getString(R.string.cd_sync_pending)
+        retryButton.visibility =
+            if (exp.syncStatus == ExpenseSyncStatus.Failed) View.VISIBLE else View.GONE
+        retryButton.setOnClickListener {
+            onRetrySync?.invoke(exp.id)
+            Toast.makeText(requireContext(), R.string.sync_retry_queued, Toast.LENGTH_SHORT).show()
+            dismiss()
         }
     }
 

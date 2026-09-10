@@ -165,10 +165,13 @@ class BudgetAlertNotifier @Inject constructor(
     private fun alertKey(userId: String, monthKey: String, threshold: Int) =
         "$userId:$monthKey:$threshold"
 
-    private companion object {
-        const val CHANNEL_ID = "monthly_budget_alerts"
+    internal companion object {
+        private const val CHANNEL_ID = "monthly_budget_alerts"
+        private const val OVER_BUDGET_NOTIFICATION_ID = 100
+
+        /** Exposed so sign-out can clear this file; the de-dup marks are per user+month and
+         *  would otherwise suppress alerts for whoever signs in next on the device. */
         const val PREFS_NAME = "MoneySnapBudgetAlerts"
-        const val OVER_BUDGET_NOTIFICATION_ID = 100
     }
 }
 

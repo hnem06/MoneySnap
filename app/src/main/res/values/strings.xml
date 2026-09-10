@@ -127,6 +127,19 @@
     <string name="budget_over_notification_title">Bạn đã vượt ngân sách tháng</string>
     <string name="budget_over_notification_content">Đã vượt %1$s. Tổng chi hiện tại là %2$s trên ngân sách %3$s.</string>
     <string name="receipt_scan_applied">Đã nhận dạng số tiền, ngày và danh mục tìm thấy</string>
+    <string name="camera_permission_denied">Cần quyền máy ảnh để chụp hóa đơn. Bạn vẫn có thể chọn ảnh từ thư viện.</string>
+    <string name="camera_permission_rationale_title">Cho phép dùng máy ảnh</string>
+    <string name="camera_permission_rationale_message">MoneySnap cần quyền máy ảnh để chụp ảnh hóa đơn. Hãy bật quyền này trong Cài đặt.</string>
+    <string name="camera_permission_open_settings">Mở Cài đặt</string>
+    <string name="camera_permission_cancel">Để sau</string>
+
+    <!-- Sync / kết nối -->
+    <string name="offline_banner_message">Đang ngoại tuyến · Thay đổi sẽ được đồng bộ sau</string>
+    <string name="sync_status_pending">Chờ đồng bộ</string>
+    <string name="sync_status_failed">Đồng bộ thất bại</string>
+    <string name="sync_retry">Thử lại</string>
+    <string name="sync_retry_queued">Đã đưa vào hàng đợi đồng bộ</string>
+    <string name="cd_sync_pending">Khoản chi này chưa được đồng bộ</string>
     <string name="receipt_scan_no_data">Không tìm thấy số tiền hoặc ngày phù hợp trên hóa đơn</string>
     <string name="receipt_scan_failed">Không thể nhận dạng hóa đơn này</string>
     <string name="history_filter_all">Tất cả</string>

@@ -21,7 +21,6 @@ import com.devpro58.hnem06.moneysnap.R
 import com.devpro58.hnem06.moneysnap.core.utils.MoneyFormatter
 import com.devpro58.hnem06.moneysnap.core.utils.localizedName
 import com.devpro58.hnem06.moneysnap.domain.model.AuthUser
-import com.devpro58.hnem06.moneysnap.domain.repository.AuthRepository
 import com.devpro58.hnem06.moneysnap.domain.model.PaymentMethod
 import com.devpro58.hnem06.moneysnap.domain.usecase.onboarding.GetLanguageCodeUseCase
 import com.devpro58.hnem06.moneysnap.domain.usecase.onboarding.SetLanguageCodeUseCase
@@ -40,7 +39,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
 
-    @Inject lateinit var authRepository: AuthRepository
     @Inject lateinit var getLanguageCode: GetLanguageCodeUseCase
     @Inject lateinit var setLanguageCode: SetLanguageCodeUseCase
     @Inject lateinit var getDarkMode: GetDarkModeUseCase
@@ -140,12 +138,16 @@ class ProfileFragment : Fragment() {
                 .setMessage(R.string.profile_logout_confirm_message)
                 .setNegativeButton(R.string.profile_logout_cancel, null)
                 .setPositiveButton(R.string.profile_logout_ok) { _, _ ->
-                    authRepository.signOut()
-                    val intent = Intent(requireContext(), AuthScreen::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    startActivity(intent)
+                    viewModel.signOut()
                 }
                 .show()
+        }
+
+        viewModel.signedOut.observe(viewLifecycleOwner) { signedOut ->
+            if (!signedOut) return@observe
+            val intent = Intent(requireContext(), AuthScreen::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
         }
 
         viewModel.paymentMethods.observe(viewLifecycleOwner) { methods ->

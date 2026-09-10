@@ -1,6 +1,7 @@
 package com.devpro58.hnem06.moneysnap.data.repository
 
 import android.content.Context
+import com.devpro58.hnem06.moneysnap.data.notification.BudgetAlertNotifier
 import com.devpro58.hnem06.moneysnap.domain.repository.SettingsRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -12,6 +13,8 @@ class SharedPreferencesSettingsRepository @Inject constructor(
 ) : SettingsRepository {
 
     private val preferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+    private val budgetAlertPreferences =
+        context.getSharedPreferences(BudgetAlertNotifier.PREFS_NAME, Context.MODE_PRIVATE)
 
     override fun isDarkMode(): Boolean =
         preferences.getBoolean(KEY_DARK_MODE, false)
@@ -34,6 +37,16 @@ class SharedPreferencesSettingsRepository @Inject constructor(
 
     override fun isMonthlyBudgetConfigured(): Boolean =
         preferences.getBoolean(KEY_MONTHLY_BUDGET_CONFIGURED, false)
+
+    override fun clearUserScopedSettings() {
+        preferences.edit()
+            .remove(KEY_MONTHLY_BUDGET)
+            .remove(KEY_MONTHLY_BUDGET_CONFIGURED)
+            .apply()
+        // The alert bookkeeping is keyed by user+month, but it lives in a separate prefs file and
+        // would otherwise keep suppressing notifications for whoever signs in next on this device.
+        budgetAlertPreferences.edit().clear().apply()
+    }
 
     private companion object {
         const val PREFS_NAME = "MoneySnapPrefs"

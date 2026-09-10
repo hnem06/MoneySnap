@@ -2,17 +2,25 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" >
 
+    <!--
+        No storage/media permissions: receipts are picked with ActivityResultContracts.GetContent(),
+        which goes through the Storage Access Framework and grants access per-URI. READ_MEDIA_IMAGES
+        / READ_EXTERNAL_STORAGE / WRITE_EXTERNAL_STORAGE were declared but never needed — they only
+        added permission prompts and Play Data Safety disclosures.
+    -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
+    <!--
+        allowBackup is off: the Room database and cached receipts are fully re-derivable from
+        Firestore on the next sign-in, while a Drive restore could place one account's expense
+        history onto a device where a different account signs in. Nothing of value is lost.
+    -->
     <application
         android:name=".MoneySnapApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"

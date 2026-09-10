@@ -79,13 +79,15 @@ class EditExpenseBottomSheet : BottomSheetDialogFragment() {
                 return@setOnClickListener
             }
 
+            // updatedAtMillis and syncStatus are set by ExpenseRepositoryImpl.updateExpense —
+            // stamping them here would let a caller that forgets to do so write an edit that
+            // sync treats as already-pushed.
             val updated = exp.copy(
                 amount = newAmount,
                 title = newTitle,
                 category = selectedCategory(chipGroup),
                 paymentMethod = paymentInput.text.toString().trim().ifEmpty { null },
-                note = noteInput.text.toString().trim().ifEmpty { null },
-                updatedAtMillis = System.currentTimeMillis()
+                note = noteInput.text.toString().trim().ifEmpty { null }
             )
             onSave?.invoke(updated)
             dismiss()

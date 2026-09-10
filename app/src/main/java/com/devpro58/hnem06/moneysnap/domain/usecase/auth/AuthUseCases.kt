@@ -1,6 +1,9 @@
 package com.devpro58.hnem06.moneysnap.domain.usecase.auth
 
 import com.devpro58.hnem06.moneysnap.domain.repository.AuthRepository
+import com.devpro58.hnem06.moneysnap.domain.repository.ExpenseRepository
+import com.devpro58.hnem06.moneysnap.domain.repository.PaymentMethodRepository
+import com.devpro58.hnem06.moneysnap.domain.repository.SettingsRepository
 import javax.inject.Inject
 
 class CheckAuthSessionUseCase @Inject constructor(
@@ -35,10 +38,36 @@ class SendPasswordResetUseCase @Inject constructor(
     suspend operator fun invoke(email: String) = repository.sendPasswordResetEmail(email)
 }
 
+/**
+ * Signs out and removes every trace of the account from this device.
+ *
+ * `firebaseAuth.signOut()` alone left the user's expenses in Room, their receipt images in
+ * `filesDir/receipts/{uid}`, and their budget in SharedPreferences — so on a shared device the
+ * next person to sign in inherited the previous account's data and notification state.
+ *
+ * Local cleanup runs before the auth sign-out and each step is isolated: a failure to delete a
+ * cached file must never leave the user still signed in.
+ */
 class SignOutUseCase @Inject constructor(
-    private val repository: AuthRepository
+    private val repository: AuthRepository,
+    private val expenseRepository: ExpenseRepository,
+    private val paymentMethodRepository: PaymentMethodRepository,
+    private val settingsRepository: SettingsRepository
 ) {
-    operator fun invoke() = repository.signOut()
+    suspend operator fun invoke() {
+        val userId = repository.getCurrentUser()?.id
+
+        // Each step is isolated: failing to delete a cached file must never leave the user
+        // still signed in. Cancelling queued sync work is handled inside clearLocalData, which
+        // owns the scheduler — the domain layer must not reach into data/sync directly.
+        if (userId != null) {
+            runCatching { expenseRepository.clearLocalData(userId) }
+            runCatching { paymentMethodRepository.clearLocalData(userId) }
+        }
+        runCatching { settingsRepository.clearUserScopedSettings() }
+
+        repository.signOut()
+    }
 }
 
 class GetCurrentUserUseCase @Inject constructor(

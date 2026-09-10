@@ -11,6 +11,7 @@ import com.devpro58.hnem06.moneysnap.domain.model.ExpenseCategory
 import com.devpro58.hnem06.moneysnap.domain.model.HistoryFilter
 import com.devpro58.hnem06.moneysnap.domain.usecase.expense.DeleteExpenseUseCase
 import com.devpro58.hnem06.moneysnap.domain.usecase.expense.GetExpenseHistoryUseCase
+import com.devpro58.hnem06.moneysnap.domain.usecase.expense.RetryReceiptUploadUseCase
 import com.devpro58.hnem06.moneysnap.domain.usecase.expense.UpdateExpenseUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -22,7 +23,8 @@ import kotlinx.coroutines.launch
 class HistoryViewModel @Inject constructor(
     private val getExpenseHistory: GetExpenseHistoryUseCase,
     private val deleteExpenseUseCase: DeleteExpenseUseCase,
-    private val updateExpenseUseCase: UpdateExpenseUseCase
+    private val updateExpenseUseCase: UpdateExpenseUseCase,
+    private val retryReceiptUploadUseCase: RetryReceiptUploadUseCase
 ) : ViewModel() {
 
     private val filter = MutableLiveData(HistoryFilter())
@@ -66,6 +68,13 @@ class HistoryViewModel @Inject constructor(
 
     fun clearFilters() {
         filter.value = HistoryFilter(query = filter.value?.query.orEmpty())
+    }
+
+    /** Re-queues a failed upload. Fire-and-forget: the outcome shows up as a status change. */
+    fun retrySync(expenseId: String) {
+        viewModelScope.launch {
+            runCatching { retryReceiptUploadUseCase(expenseId) }
+        }
     }
 
     fun deleteExpense(expenseId: String) {

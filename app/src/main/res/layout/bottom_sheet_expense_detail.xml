@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_bottom_sheet"
@@ -195,6 +196,45 @@
                 android:scaleType="centerCrop"
                 app:shapeAppearanceOverlay="@style/ShapeAppearance.App.Receipt" />
         </LinearLayout>
+    </LinearLayout>
+
+    <!--
+        Sync state. Hidden for synced expenses, which are the overwhelming majority — surfacing
+        it always would make normal saves look uncertain. ExpenseSyncStatus and
+        ReceiptUploadStatus existed in the domain layer but were never shown anywhere, so a
+        failed upload was completely invisible to the user.
+    -->
+    <LinearLayout
+        android:id="@+id/detailSyncSection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="24dp"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <TextView
+            android:id="@+id/detailSyncStatus"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="8dp"
+            android:gravity="center_vertical"
+            android:textAppearance="?attr/textAppearanceBodyMedium"
+            android:textColor="@color/text_muted"
+            app:drawableStartCompat="@drawable/ic_cloud_off"
+            app:drawableTint="@color/text_muted"
+            tools:text="@string/sync_status_pending" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnRetrySync"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="0dp"
+            android:text="@string/sync_retry" />
     </LinearLayout>
 
     <!-- Bottom buttons -->

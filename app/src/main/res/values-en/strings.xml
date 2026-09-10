@@ -124,6 +124,19 @@
     <string name="budget_over_notification_title">Monthly budget exceeded</string>
     <string name="budget_over_notification_content">You are %1$s over budget. Current spending is %2$s out of %3$s.</string>
     <string name="receipt_scan_applied">Detected amount, date, and available category</string>
+    <string name="camera_permission_denied">Camera access is needed to photograph receipts. You can still pick an image from your gallery.</string>
+    <string name="camera_permission_rationale_title">Allow camera access</string>
+    <string name="camera_permission_rationale_message">MoneySnap needs camera access to photograph receipts. Enable it in Settings.</string>
+    <string name="camera_permission_open_settings">Open Settings</string>
+    <string name="camera_permission_cancel">Not now</string>
+
+    <!-- Sync / connectivity -->
+    <string name="offline_banner_message">Offline · Changes will sync later</string>
+    <string name="sync_status_pending">Waiting to sync</string>
+    <string name="sync_status_failed">Sync failed</string>
+    <string name="sync_retry">Retry</string>
+    <string name="sync_retry_queued">Queued for sync</string>
+    <string name="cd_sync_pending">This expense has not been synced</string>
     <string name="receipt_scan_no_data">No suitable amount or date was found on the receipt</string>
     <string name="receipt_scan_failed">This receipt could not be recognized</string>
     <string name="history_filter_all">All</string>

@@ -110,6 +110,10 @@ class PaymentMethodRepositoryImpl @Inject constructor(
         paymentMethodDao.deleteCustomById(methodId)
     }
 
+    override suspend fun clearLocalData(userId: String) {
+        paymentMethodDao.deleteAllByUser(userId)
+    }
+
     private suspend fun synchronizeExistingMethods(userId: String) {
         val remote = remoteSource.getPaymentMethods(userId)
         if (remote.isNotEmpty()) {

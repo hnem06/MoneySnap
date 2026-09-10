@@ -18,4 +18,8 @@ interface ExpenseRepository {
     /** Listens to remote expenses for [userId] and reconciles them into the local store.
      *  Suspends indefinitely (realtime listener); cancel the coroutine to stop syncing. */
     suspend fun syncRemoteExpenses(userId: String)
+
+    /** Drops this device's cached copy of a user's expenses and receipt images. Remote data is
+     *  untouched — everything is restored on the next sign-in. */
+    suspend fun clearLocalData(userId: String)
 }

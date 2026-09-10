@@ -23,4 +23,9 @@
     <!-- Accents -->
     <color name="accent_green">#6EE7B7</color>
     <color name="soft_green">#14352B</color>
+
+    <!-- Offline banner: dark amber surface with a light amber ink, keeping the same
+         semantic while staying readable on the dark background. -->
+    <color name="offline_banner_bg">#3A2E10</color>
+    <color name="offline_banner_text">#FCD34D</color>
 </resources>

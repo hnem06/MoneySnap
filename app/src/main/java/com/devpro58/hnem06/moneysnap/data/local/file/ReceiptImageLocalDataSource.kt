@@ -40,6 +40,15 @@ class ReceiptImageLocalDataSource @Inject constructor(
     }
 
     /**
+     * Removes every cached receipt image for a user. Called on sign-out: the images are
+     * re-downloadable from Storage, and leaving one account's receipts readable on a shared
+     * device after the next person signs in is a privacy leak.
+     */
+    fun deleteAllForUser(userId: String) {
+        File(context.filesDir, "receipts/$userId").deleteRecursively()
+    }
+
+    /**
      * Decode bitmap from Uri, downsampling if the image exceeds [MAX_DIMENSION].
      * This prevents storing raw camera photos (typically 3-8 MB) at full resolution.
      */

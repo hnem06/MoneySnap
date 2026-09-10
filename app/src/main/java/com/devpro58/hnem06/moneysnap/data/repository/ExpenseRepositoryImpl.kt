@@ -33,7 +33,7 @@ class ExpenseRepositoryImpl @Inject constructor(
 ) : ExpenseRepository {
 
     override fun observeHomeDashboard(userId: String): Flow<HomeDashboard> =
-        expenseDao.observeByUser(userId).map { entities ->
+        expenseDao.observeVisibleByUser(userId).map { entities ->
             val expenses = entities.map { it.toDomain() }
             val now = System.currentTimeMillis()
             val monthStart = startOfMonth(now)
@@ -56,7 +56,7 @@ class ExpenseRepositoryImpl @Inject constructor(
         }
 
     override fun observeHistory(userId: String, filter: HistoryFilter): Flow<List<Expense>> =
-        expenseDao.observeByUser(userId).map { entities ->
+        expenseDao.observeVisibleByUser(userId).map { entities ->
             entities.map { it.toDomain() }
                 .filter { expense ->
                     filter.category == null || expense.category == filter.category
@@ -119,37 +119,52 @@ class ExpenseRepositoryImpl @Inject constructor(
         return expense
     }
 
+    /**
+     * Marking the row [ExpenseSyncStatus.PendingUpload] happens here rather than at the call site
+     * so no caller can forget. Previously an edit was written with whatever `syncStatus` it
+     * already carried — usually `Synced` — which made [hasPendingLocalChanges] report `false`,
+     * leaving an un-pushed local edit unprotected against being overwritten or deleted by the
+     * next remote snapshot.
+     */
     override suspend fun updateExpense(expense: Expense) {
-        expenseDao.upsert(expense.toEntity())
+        expenseDao.upsert(
+            expense.toEntity().copy(
+                syncStatus = ExpenseSyncStatus.PendingUpload.name,
+                updatedAtMillis = System.currentTimeMillis()
+            )
+        )
         syncScheduler.enqueueExpenseSync(expense.id)
         runCatching {
             budgetAlertNotifier.notifyIfNeeded(expense.userId, alwaysNotifyOverBudget = true)
         }
     }
 
+    /**
+     * Local-first delete: flag the row and hand the remote cascade to the sync worker.
+     *
+     * This used to call Firestore first and fall back to [ExpenseSyncStatus.PendingDelete] in a
+     * `catch`. That fallback was unreachable. Firestore enables offline persistence by default,
+     * so `delete()` returns a Task that only completes once the **server** acknowledges the
+     * write — offline it never completes and never throws, so `awaitTask()` suspended forever:
+     * the delete appeared to hang, no status was written, and the row stayed on screen.
+     *
+     * [ExpenseDao.observeVisibleByUser] hides `PendingDelete` rows, so the expense disappears
+     * from the UI immediately whether or not there is a network.
+     */
     override suspend fun deleteExpense(expenseId: String) {
         val entity = expenseDao.getById(expenseId) ?: return
 
-        // 1. Delete from Firestore first so it won't come back during sync
-        try {
-            firestoreExpenseSource.deleteExpense(entity.userId, expenseId)
-        } catch (_: Exception) {
-            // Offline: mark as PendingDelete so the sync worker handles it later
-            expenseDao.updateUploadStatus(
-                expenseId = expenseId,
-                receiptUploadStatus = entity.receiptUploadStatus,
-                syncStatus = ExpenseSyncStatus.PendingDelete.name,
-                updatedAtMillis = System.currentTimeMillis()
-            )
-            syncScheduler.enqueueExpenseSync(expenseId)
-            return
+        expenseDao.updateUploadStatus(
+            expenseId = expenseId,
+            receiptUploadStatus = entity.receiptUploadStatus,
+            syncStatus = ExpenseSyncStatus.PendingDelete.name,
+            updatedAtMillis = System.currentTimeMillis()
+        )
+        syncScheduler.enqueueExpenseSync(expenseId)
+
+        runCatching {
+            budgetAlertNotifier.notifyIfNeeded(entity.userId)
         }
-
-        // 2. Clean up local receipt file
-        receiptImageLocalDataSource.deleteReceipt(entity.localReceiptPath)
-
-        // 3. Remove from local DB
-        expenseDao.deleteById(expenseId)
     }
 
     override suspend fun retryReceiptUpload(expenseId: String) {
@@ -160,6 +175,15 @@ class ExpenseRepositoryImpl @Inject constructor(
             updatedAtMillis = System.currentTimeMillis()
         )
         syncScheduler.enqueueExpenseSync(expenseId)
+    }
+
+    override suspend fun clearLocalData(userId: String) {
+        // Cancel first: queued work would otherwise run against a signed-out session, or push
+        // rows that are about to be deleted — and on a shared device it could execute under
+        // whichever account signs in next.
+        syncScheduler.cancelAllSync()
+        expenseDao.deleteAllByUser(userId)
+        receiptImageLocalDataSource.deleteAllForUser(userId)
     }
 
     override suspend fun syncRemoteExpenses(userId: String) {
