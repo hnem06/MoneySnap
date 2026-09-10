@@ -39,7 +39,8 @@ object DatabaseModule {
     fun providePaymentMethodDao(database: AppDatabase): PaymentMethodDao =
         database.paymentMethodDao()
 
-    private val MIGRATION_1_2 = object : Migration(1, 2) {
+    /** Adds the `payment_methods` table. `internal` so MigrationTest can validate it. */
+    internal val MIGRATION_1_2 = object : Migration(1, 2) {
         override fun migrate(db: SupportSQLiteDatabase) {
             db.execSQL(
                 """

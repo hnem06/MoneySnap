@@ -17,6 +17,15 @@ lifecycle = "2.8.2"
 work = "2.9.0"
 hiltAndroidx = "1.2.0"
 
+# Testing
+archCoreTesting = "2.2.0"
+mockk = "1.13.13"
+# Logging / crash reporting
+timber = "5.0.1"
+crashlyticsPlugin = "3.0.6"
+# java.time on minSdk 24
+desugarJdkLibs = "2.1.5"
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -47,7 +56,25 @@ androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx"
 androidx-hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "hiltAndroidx" }
 androidx-hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltAndroidx" }
 
+# Logging — Timber trees are planted in MoneySnapApplication (debug: Logcat, release: Crashlytics)
+timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
+# java.time (LocalDate/ZonedDateTime) backport — required at minSdk 24 for recurrence + stats date math
+desugar-jdk-libs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugarJdkLibs" }
+
+# Testing — kotlinx-coroutines-test MUST stay pinned to the same `coroutines` ref as
+# kotlinx-coroutines-android, otherwise Dispatchers.setMain fails at runtime.
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
+# InstantTaskExecutorRule — required by every test touching a LiveData-exposing ViewModel
+androidx-arch-core-testing = { group = "androidx.arch.core", name = "core-testing", version.ref = "archCoreTesting" }
+# Needed because the data layer's Firebase sources are final concrete classes, not interfaces —
+# hand-written fakes are only an option above the repository boundary.
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+room-testing = { group = "androidx.room", name = "room-testing", version.ref = "room" }
+androidx-work-testing = { group = "androidx.work", name = "work-testing", version.ref = "work" }
+hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version = "2.0.0-1.0.21" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashlyticsPlugin" }
