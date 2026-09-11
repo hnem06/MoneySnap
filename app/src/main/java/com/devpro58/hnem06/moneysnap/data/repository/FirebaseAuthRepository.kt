@@ -13,6 +13,9 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.devpro58.hnem06.moneysnap.data.remote.firestore.FirestoreAccountDeletionSource
+import com.devpro58.hnem06.moneysnap.data.remote.storage.FirebaseReceiptStorageSource
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
@@ -38,7 +41,9 @@ import kotlinx.coroutines.withContext
 class FirebaseAuthRepository @Inject constructor(
     @param:ApplicationContext private val context: Context,
     private val firebaseAuth: FirebaseAuth,
-    private val firebaseStorage: FirebaseStorage
+    private val firebaseStorage: FirebaseStorage,
+    private val accountDeletionSource: FirestoreAccountDeletionSource,
+    private val receiptStorageSource: FirebaseReceiptStorageSource
 ) : AuthRepository {
 
     override fun getCurrentUser(): AuthUser? =
@@ -98,6 +103,61 @@ class FirebaseAuthRepository @Inject constructor(
 
     override fun signOut() {
         firebaseAuth.signOut()
+    }
+
+    override fun hasPasswordProvider(): Boolean =
+        firebaseAuth.currentUser
+            ?.providerData
+            ?.any { it.providerId == EmailAuthProvider.PROVIDER_ID } == true
+
+    override suspend fun reauthenticate(password: String) {
+        runAuthCall {
+            val user = firebaseAuth.currentUser ?: throw AuthDomainException(AuthError.InvalidUser)
+            val email = user.email ?: throw AuthDomainException(AuthError.InvalidUser)
+            user.reauthenticate(EmailAuthProvider.getCredential(email, password)).await()
+        }
+    }
+
+    override suspend fun updatePassword(currentPassword: String, newPassword: String) {
+        // Firebase rejects updatePassword outright when the sign-in is not recent, so the
+        // re-auth is a precondition rather than an extra safety check.
+        reauthenticate(currentPassword)
+        runAuthCall {
+            val user = firebaseAuth.currentUser ?: throw AuthDomainException(AuthError.InvalidUser)
+            user.updatePassword(newPassword).await()
+        }
+    }
+
+    /**
+     * Cascade order is load-bearing: `user.delete()` must be LAST.
+     *
+     * Every earlier step authenticates as this user. If the auth record went first, a failure
+     * anywhere afterwards would leave the data orphaned with no credentials that could ever
+     * reach it again. Deleting auth last means a partial failure is simply retryable.
+     */
+    override suspend fun deleteAccount(password: String?) {
+        val user = firebaseAuth.currentUser ?: throw AuthDomainException(AuthError.InvalidUser)
+        val userId = user.uid
+
+        if (hasPasswordProvider()) {
+            val current = password ?: throw AuthDomainException(AuthError.InvalidCredentials)
+            reauthenticate(current)
+        }
+
+        runAuthCall {
+            accountDeletionSource.deleteAllUserData(userId)
+
+            receiptStorageSource.deleteAllReceiptsForUser(userId)
+            try {
+                firebaseStorage.reference
+                    .child("avatars").child(userId).child("avatar.jpg")
+                    .delete().await()
+            } catch (exception: StorageException) {
+                if (exception.errorCode != StorageException.ERROR_OBJECT_NOT_FOUND) throw exception
+            }
+
+            firebaseAuth.currentUser?.delete()?.await()
+        }
     }
 
     override suspend fun updateDisplayName(name: String): AuthUser = runAuthCall {

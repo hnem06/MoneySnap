@@ -126,6 +126,9 @@ class ProfileFragment : Fragment() {
         }
         setupRow(view.findViewById(R.id.rowSecurity),
             R.drawable.ic_profile_security, getString(R.string.profile_security))
+        view.findViewById<View>(R.id.rowSecurity).setOnClickListener {
+            findNavController().navigate(R.id.securityFragment)
+        }
 
         // App Settings rows.
         // No currency picker: MoneyFormatter is VND-only and Expense.currency is hardcoded at

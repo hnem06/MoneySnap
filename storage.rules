@@ -6,6 +6,13 @@ rules_version = '2';
 // nên ngưỡng 5MB an toàn, không chặn nhầm ảnh camera.
 service firebase.storage {
   match /b/{bucket}/o {
+    // Account deletion enumerates this prefix to remove every receipt. `list` is granted on the
+    // prefix itself, which the object-level rule below does not cover — without this, listAll()
+    // fails and deleting an account silently orphans all of its images.
+    match /receipts/{userId} {
+      allow list: if request.auth != null && request.auth.uid == userId;
+    }
+
     match /receipts/{userId}/{fileName} {
       allow read, delete: if request.auth != null
                           && request.auth.uid == userId;

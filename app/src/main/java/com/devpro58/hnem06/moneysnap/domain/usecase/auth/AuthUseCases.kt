@@ -70,6 +70,44 @@ class SignOutUseCase @Inject constructor(
     }
 }
 
+class HasPasswordProviderUseCase @Inject constructor(
+    private val repository: AuthRepository
+) {
+    operator fun invoke(): Boolean = repository.hasPasswordProvider()
+}
+
+class ChangePasswordUseCase @Inject constructor(
+    private val repository: AuthRepository
+) {
+    suspend operator fun invoke(currentPassword: String, newPassword: String) =
+        repository.updatePassword(currentPassword, newPassword)
+}
+
+/**
+ * Deletes the account remotely and then clears everything this device cached for it.
+ *
+ * Local cleanup runs after the remote cascade succeeds: wiping Room first would leave the user
+ * with an empty app if the remote deletion then failed and they stayed signed in.
+ */
+class DeleteAccountUseCase @Inject constructor(
+    private val repository: AuthRepository,
+    private val expenseRepository: ExpenseRepository,
+    private val paymentMethodRepository: PaymentMethodRepository,
+    private val settingsRepository: SettingsRepository
+) {
+    suspend operator fun invoke(password: String?) {
+        val userId = repository.getCurrentUser()?.id
+
+        repository.deleteAccount(password)
+
+        if (userId != null) {
+            runCatching { expenseRepository.clearLocalData(userId) }
+            runCatching { paymentMethodRepository.clearLocalData(userId) }
+        }
+        runCatching { settingsRepository.clearUserScopedSettings() }
+    }
+}
+
 class GetCurrentUserUseCase @Inject constructor(
     private val repository: AuthRepository
 ) {

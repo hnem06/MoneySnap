@@ -46,6 +46,11 @@
         android:label="@string/tab_profile" />
 
     <fragment
+        android:id="@+id/securityFragment"
+        android:name="com.devpro58.hnem06.moneysnap.presentation.security.SecurityFragment"
+        android:label="@string/security_title" />
+
+    <fragment
         android:id="@+id/budgetFragment"
         android:name="com.devpro58.hnem06.moneysnap.presentation.budget.BudgetFragment"
         android:label="@string/budget_title" />

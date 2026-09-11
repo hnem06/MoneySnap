@@ -334,4 +334,26 @@
     <string name="personal_info_saved">Đã lưu thông tin</string>
     <string name="profile_action_failed">Thao tác thất bại. Vui lòng kiểm tra kết nối mạng.</string>
 
+    <!-- Bảo mật tài khoản -->
+    <string name="security_title">Bảo mật</string>
+    <string name="security_change_password">Đổi mật khẩu</string>
+    <string name="security_change_password_google">Tài khoản Google quản lý mật khẩu của bạn</string>
+    <string name="security_current_password">Mật khẩu hiện tại</string>
+    <string name="security_new_password">Mật khẩu mới</string>
+    <string name="security_confirm_password">Xác nhận mật khẩu mới</string>
+    <string name="security_password_changed">Đã đổi mật khẩu</string>
+    <string name="security_save">Lưu</string>
+    <string name="security_cancel">Huỷ</string>
+    <string name="security_delete_account">Xoá tài khoản</string>
+    <string name="security_delete_account_subtitle">Xoá vĩnh viễn tài khoản và toàn bộ dữ liệu</string>
+    <string name="security_delete_title">Xoá tài khoản?</string>
+    <string name="security_delete_message">Toàn bộ khoản chi, ảnh hoá đơn và cài đặt của bạn sẽ bị xoá vĩnh viễn khỏi máy này và khỏi máy chủ. Không thể hoàn tác.\n\nNhập %1$s để xác nhận.</string>
+    <string name="security_delete_keyword">XOA</string>
+    <string name="security_delete_confirm_hint">Nhập %1$s</string>
+    <string name="security_delete_password_hint">Mật khẩu của bạn</string>
+    <string name="security_delete_confirm">Xoá vĩnh viễn</string>
+    <string name="security_delete_mismatch">Từ xác nhận không đúng</string>
+    <string name="security_deleted">Đã xoá tài khoản</string>
+    <string name="security_delete_failed">Không xoá được tài khoản. Vui lòng thử lại.</string>
+    <string name="security_working">Đang xử lý…</string>
 </resources>

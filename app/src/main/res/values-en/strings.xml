@@ -330,4 +330,27 @@
     <string name="personal_info_save">Save</string>
     <string name="personal_info_saved">Information saved</string>
     <string name="profile_action_failed">Action failed. Please check your connection.</string>
+
+    <!-- Account security -->
+    <string name="security_title">Security</string>
+    <string name="security_change_password">Change password</string>
+    <string name="security_change_password_google">Your password is managed by Google</string>
+    <string name="security_current_password">Current password</string>
+    <string name="security_new_password">New password</string>
+    <string name="security_confirm_password">Confirm new password</string>
+    <string name="security_password_changed">Password changed</string>
+    <string name="security_save">Save</string>
+    <string name="security_cancel">Cancel</string>
+    <string name="security_delete_account">Delete account</string>
+    <string name="security_delete_account_subtitle">Permanently delete your account and all data</string>
+    <string name="security_delete_title">Delete account?</string>
+    <string name="security_delete_message">Every expense, receipt image and setting will be permanently deleted from this device and from the server. This cannot be undone.\n\nType %1$s to confirm.</string>
+    <string name="security_delete_keyword">DELETE</string>
+    <string name="security_delete_confirm_hint">Type %1$s</string>
+    <string name="security_delete_password_hint">Your password</string>
+    <string name="security_delete_confirm">Delete permanently</string>
+    <string name="security_delete_mismatch">Confirmation word does not match</string>
+    <string name="security_deleted">Account deleted</string>
+    <string name="security_delete_failed">Could not delete the account. Please try again.</string>
+    <string name="security_working">Working…</string>
 </resources>

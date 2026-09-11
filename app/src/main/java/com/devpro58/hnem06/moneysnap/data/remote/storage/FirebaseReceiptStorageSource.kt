@@ -54,4 +54,29 @@ class FirebaseReceiptStorageSource @Inject constructor(
             if (exception.errorCode != StorageException.ERROR_OBJECT_NOT_FOUND) throw exception
         }
     }
+
+    /**
+     * Deletes every receipt image belonging to a user, for account deletion.
+     *
+     * Note this needs `list` permission on the `receipts/{uid}` **prefix**, not just on the
+     * objects under it — see the matching rule in storage.rules. Without that rule listAll()
+     * fails and the cascade silently leaves every image behind.
+     */
+    suspend fun deleteAllReceiptsForUser(userId: String) {
+        val folder = firebaseStorage.reference.child("receipts").child(userId)
+        val listing = try {
+            folder.listAll().awaitTask()
+        } catch (exception: StorageException) {
+            // Nothing was ever uploaded: an empty prefix does not exist as an object.
+            if (exception.errorCode == StorageException.ERROR_OBJECT_NOT_FOUND) return
+            throw exception
+        }
+        listing.items.forEach { item ->
+            try {
+                item.delete().awaitTask()
+            } catch (exception: StorageException) {
+                if (exception.errorCode != StorageException.ERROR_OBJECT_NOT_FOUND) throw exception
+            }
+        }
+    }
 }

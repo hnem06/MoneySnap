@@ -53,7 +53,8 @@ class MainActivity : AppCompatActivity() {
         // entry. NavigationUI cannot resolve a matching menu item for it, so the previously
         // selected tab stayed highlighted and lied about where the user was.
         navHost.navController.addOnDestinationChangedListener { _, destination, _ ->
-            binding.bottomNavigation.isVisible = destination.id != R.id.budgetFragment
+            binding.bottomNavigation.isVisible =
+                destination.id !in DETAIL_DESTINATIONS
         }
 
         if (savedInstanceState == null && intent.getBooleanExtra(EXTRA_OPEN_BUDGET_SETUP, false)) {
@@ -90,6 +91,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
+        /** Screens reached from Profile that have their own back arrow and no bottom-nav entry. */
+        private val DETAIL_DESTINATIONS = setOf(R.id.budgetFragment, R.id.securityFragment)
+
         const val EXTRA_SHOW_SESSION_ERROR = "SHOW_SESSION_ERROR"
         const val EXTRA_OPEN_BUDGET_SETUP = "OPEN_BUDGET_SETUP"
     }
