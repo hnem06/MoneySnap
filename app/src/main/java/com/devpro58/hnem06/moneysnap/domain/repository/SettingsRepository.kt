@@ -3,6 +3,14 @@ package com.devpro58.hnem06.moneysnap.domain.repository
 interface SettingsRepository {
     fun isDarkMode(): Boolean
     fun setDarkMode(enabled: Boolean)
+
+    /**
+     * User's own on/off switch for budget alerts, independent of the OS permission.
+     * Defaults to true to match the switch's previously hardcoded checked state, so nobody's
+     * notifications silently turn off on upgrade.
+     */
+    fun areBudgetAlertsEnabled(): Boolean
+    fun setBudgetAlertsEnabled(enabled: Boolean)
     fun getMonthlyBudget(): Long
     fun setMonthlyBudget(amount: Long)
     fun isMonthlyBudgetConfigured(): Boolean

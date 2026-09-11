@@ -1,5 +1,12 @@
 package com.devpro58.hnem06.moneysnap.domain.model
 
+import java.io.Serializable
+
+/**
+ * [Serializable] so the model can travel in a Fragment `arguments` Bundle — bottom sheets that
+ * received it through a setter lost it whenever the system recreated them and silently dismissed.
+ * `java.io.Serializable` is JDK, not Android, so the domain layer stays platform-free.
+ */
 data class Expense(
     val id: String,
     val userId: String,
@@ -16,4 +23,4 @@ data class Expense(
     val spentAtMillis: Long,
     val createdAtMillis: Long,
     val updatedAtMillis: Long
-)
+) : Serializable

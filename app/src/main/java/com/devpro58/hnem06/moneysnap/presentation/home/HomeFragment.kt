@@ -24,6 +24,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import coil.load
+import com.devpro58.hnem06.moneysnap.core.utils.MonthlyTrend
+import com.devpro58.hnem06.moneysnap.core.utils.TrendDirection
 import com.devpro58.hnem06.moneysnap.R
 import com.devpro58.hnem06.moneysnap.core.utils.MoneyFormatter
 import com.devpro58.hnem06.moneysnap.core.utils.localizedLabel
@@ -35,6 +37,7 @@ import com.devpro58.hnem06.moneysnap.presentation.history.ExpenseDetailBottomShe
 import com.google.android.material.card.MaterialCardView
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
+import timber.log.Timber
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -68,7 +71,18 @@ class HomeFragment : Fragment() {
         }
 
         viewModel.uiState.observe(viewLifecycleOwner) { state ->
-            if (state is HomeUiState.Content) renderContent(state)
+            when (state) {
+                is HomeUiState.Content -> renderContent(state)
+                // Error was previously emitted and silently dropped, leaving the last-rendered
+                // numbers on screen as if they were still current.
+                is HomeUiState.Error -> {
+                    Timber.e("Home dashboard failed: %s", state.message)
+                    binding.homeEmptyText.text = getString(R.string.error_home_load_failed)
+                    binding.homeEmptyText.visibility = View.VISIBLE
+                    binding.recentSnapsContainer.removeAllViews()
+                }
+                HomeUiState.Loading -> Unit
+            }
         }
         viewModel.actionResult.observe(viewLifecycleOwner) { result ->
             result ?: return@observe
@@ -92,13 +106,51 @@ class HomeFragment : Fragment() {
         binding.monthlyTotalText.text = MoneyFormatter.formatVnd(dashboard.monthlyTotal)
         binding.todayTotalText.text = MoneyFormatter.formatVnd(dashboard.todayTotal)
         binding.monthlyExpenseCountText.text = dashboard.monthlyExpenseCount.toString()
+        // Reset the text as well as the visibility: the error branch reuses this view, and
+        // without this a recovered load would still be showing the failure message.
+        binding.homeEmptyText.setText(R.string.home_empty)
         binding.homeEmptyText.visibility =
             if (dashboard.recentExpenses.isEmpty()) View.VISIBLE else View.GONE
+
+        bindMonthlyTrend(dashboard.monthlyTotal, dashboard.previousMonthTotal)
 
         binding.recentSnapsContainer.removeAllViews()
         dashboard.recentExpenses.forEach { expense ->
             binding.recentSnapsContainer.addView(createExpenseCard(expense))
         }
+    }
+
+    /**
+     * Fills in `monthlyTrendText`, which was designed and laid out but never computed — it sat
+     * `visibility="gone"` with zero code references. Spending more than last month is shown in
+     * the danger colour, less in the success colour; on a user's first month there is nothing to
+     * compare against, so the row stays hidden rather than claiming a meaningless +100%.
+     */
+    private fun bindMonthlyTrend(currentTotal: Long, previousTotal: Long) {
+        val trend = MonthlyTrend.of(currentTotal, previousTotal)
+        val percent = trend.percent
+
+        if (trend.direction == TrendDirection.Unknown || percent == null) {
+            binding.monthlyTrendText.visibility = View.GONE
+            return
+        }
+
+        binding.monthlyTrendText.visibility = View.VISIBLE
+        binding.monthlyTrendText.text = when (trend.direction) {
+            TrendDirection.Up -> getString(R.string.trend_up, percent)
+            TrendDirection.Down -> getString(R.string.trend_down, percent)
+            else -> getString(R.string.trend_flat)
+        }
+        binding.monthlyTrendText.setTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                when (trend.direction) {
+                    TrendDirection.Up -> R.color.danger_red
+                    TrendDirection.Down -> R.color.success_green
+                    else -> R.color.text_muted
+                }
+            )
+        )
     }
 
     private fun createExpenseCard(expense: Expense): View {
@@ -219,8 +271,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun showEditSheet(expense: Expense) {
-        EditExpenseBottomSheet()
-            .setExpense(expense)
+        EditExpenseBottomSheet.newInstance(expense)
+            .setPaymentMethods(viewModel.paymentMethods.value.orEmpty())
             .setOnSaveListener(viewModel::updateExpense)
             .show(childFragmentManager, EditExpenseBottomSheet.TAG)
     }

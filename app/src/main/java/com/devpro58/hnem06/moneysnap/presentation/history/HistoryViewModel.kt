@@ -11,6 +11,8 @@ import com.devpro58.hnem06.moneysnap.domain.model.ExpenseCategory
 import com.devpro58.hnem06.moneysnap.domain.model.HistoryFilter
 import com.devpro58.hnem06.moneysnap.domain.usecase.expense.DeleteExpenseUseCase
 import com.devpro58.hnem06.moneysnap.domain.usecase.expense.GetExpenseHistoryUseCase
+import com.devpro58.hnem06.moneysnap.domain.model.PaymentMethod
+import com.devpro58.hnem06.moneysnap.domain.usecase.payment.ObservePaymentMethodsUseCase
 import com.devpro58.hnem06.moneysnap.domain.usecase.expense.RetryReceiptUploadUseCase
 import com.devpro58.hnem06.moneysnap.domain.usecase.expense.UpdateExpenseUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,8 +26,12 @@ class HistoryViewModel @Inject constructor(
     private val getExpenseHistory: GetExpenseHistoryUseCase,
     private val deleteExpenseUseCase: DeleteExpenseUseCase,
     private val updateExpenseUseCase: UpdateExpenseUseCase,
-    private val retryReceiptUploadUseCase: RetryReceiptUploadUseCase
+    private val retryReceiptUploadUseCase: RetryReceiptUploadUseCase,
+    observePaymentMethods: ObservePaymentMethodsUseCase
 ) : ViewModel() {
+
+    /** Feeds the edit sheet's payment-method dropdown so an edit cannot invent a method. */
+    val paymentMethods: LiveData<List<PaymentMethod>> = observePaymentMethods().asLiveData()
 
     private val filter = MutableLiveData(HistoryFilter())
 

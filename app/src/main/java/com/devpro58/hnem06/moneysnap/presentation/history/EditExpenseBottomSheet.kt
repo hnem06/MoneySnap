@@ -1,39 +1,60 @@
 package com.devpro58.hnem06.moneysnap.presentation.history
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import com.devpro58.hnem06.moneysnap.R
 import com.devpro58.hnem06.moneysnap.core.utils.VndAmountFormatter
 import com.devpro58.hnem06.moneysnap.core.utils.enableVndAmountFormatting
+import com.devpro58.hnem06.moneysnap.core.utils.localizedName
 import com.devpro58.hnem06.moneysnap.domain.model.Expense
 import com.devpro58.hnem06.moneysnap.domain.model.ExpenseCategory
+import com.devpro58.hnem06.moneysnap.domain.model.PaymentMethod
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.ChipGroup
+import com.google.android.material.textfield.MaterialAutoCompleteTextView
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 /**
  * Bottom sheet for editing an existing expense.
- * Pre-fills fields from the provided [Expense] and calls
- * [onSave] with the updated copy.
+ *
+ * The expense is passed through [arguments] rather than a setter. With a setter the field was
+ * null after the system recreated the fragment — a configuration change or process death — and
+ * the sheet silently dismissed itself, losing whatever the user had typed. Arguments survive
+ * both.
+ *
+ * [onSave] stays a callback because the host fragment owns the ViewModel that performs the
+ * update; it is re-attached by the host on every show.
  */
 class EditExpenseBottomSheet : BottomSheetDialogFragment() {
 
-    private var expense: Expense? = null
     private var onSave: ((Expense) -> Unit)? = null
+    private var paymentMethods: List<PaymentMethod> = emptyList()
+    private var selectedSpentAtMillis: Long = 0L
+
+    private val expense: Expense?
+        get() = @Suppress("DEPRECATION") arguments?.getSerializable(ARG_EXPENSE) as? Expense
 
     override fun getTheme(): Int = R.style.App_BottomSheet_Transparent
 
-    fun setExpense(expense: Expense): EditExpenseBottomSheet {
-        this.expense = expense
+    fun setOnSaveListener(listener: (Expense) -> Unit): EditExpenseBottomSheet {
+        this.onSave = listener
         return this
     }
 
-    fun setOnSaveListener(listener: (Expense) -> Unit): EditExpenseBottomSheet {
-        this.onSave = listener
+    /** Supplies the managed payment methods the dropdown offers. */
+    fun setPaymentMethods(methods: List<PaymentMethod>): EditExpenseBottomSheet {
+        this.paymentMethods = methods
         return this
     }
 
@@ -51,31 +72,41 @@ class EditExpenseBottomSheet : BottomSheetDialogFragment() {
         val amountInput = view.findViewById<EditText>(R.id.editAmountInput)
         val titleInput = view.findViewById<EditText>(R.id.editTitleInput)
         val chipGroup = view.findViewById<ChipGroup>(R.id.editCategoryChipGroup)
-        val paymentInput = view.findViewById<EditText>(R.id.editPaymentMethodInput)
+        val paymentDropdown =
+            view.findViewById<MaterialAutoCompleteTextView>(R.id.editPaymentMethodDropdown)
+        val dateInput = view.findViewById<TextView>(R.id.editDateInput)
         val noteInput = view.findViewById<EditText>(R.id.editNoteInput)
         val cancelBtn = view.findViewById<MaterialButton>(R.id.editCancelButton)
         val saveBtn = view.findViewById<MaterialButton>(R.id.editSaveButton)
 
-        // Pre-fill
+        // Restore an in-progress date edit across recreation rather than snapping back.
+        selectedSpentAtMillis =
+            savedInstanceState?.getLong(STATE_SPENT_AT, exp.spentAtMillis) ?: exp.spentAtMillis
+
         amountInput.enableVndAmountFormatting()
         amountInput.setText(VndAmountFormatter.format(exp.amount))
         amountInput.setSelection(amountInput.text.length)
         titleInput.setText(exp.title)
-        paymentInput.setText(exp.paymentMethod.orEmpty())
         noteInput.setText(exp.note.orEmpty())
         checkCategoryChip(chipGroup, exp.category)
+
+        bindPaymentMethods(paymentDropdown, exp.paymentMethod)
+        renderDate(dateInput)
+        dateInput.setOnClickListener { showDatePicker(dateInput) }
 
         cancelBtn.setOnClickListener { dismiss() }
 
         saveBtn.setOnClickListener {
             val newAmount = VndAmountFormatter.parse(amountInput.text)
             if (newAmount == null || newAmount <= 0) {
-                Toast.makeText(requireContext(), R.string.error_amount_empty, Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), R.string.error_amount_empty, Toast.LENGTH_SHORT)
+                    .show()
                 return@setOnClickListener
             }
             val newTitle = titleInput.text.toString().trim()
             if (newTitle.isEmpty()) {
-                Toast.makeText(requireContext(), R.string.error_title_empty, Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), R.string.error_title_empty, Toast.LENGTH_SHORT)
+                    .show()
                 return@setOnClickListener
             }
 
@@ -86,12 +117,57 @@ class EditExpenseBottomSheet : BottomSheetDialogFragment() {
                 amount = newAmount,
                 title = newTitle,
                 category = selectedCategory(chipGroup),
-                paymentMethod = paymentInput.text.toString().trim().ifEmpty { null },
-                note = noteInput.text.toString().trim().ifEmpty { null }
+                paymentMethod = paymentDropdown.text.toString().trim().ifEmpty { null },
+                note = noteInput.text.toString().trim().ifEmpty { null },
+                spentAtMillis = selectedSpentAtMillis
             )
             onSave?.invoke(updated)
             dismiss()
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putLong(STATE_SPENT_AT, selectedSpentAtMillis)
+    }
+
+    private fun bindPaymentMethods(
+        dropdown: MaterialAutoCompleteTextView,
+        current: String?
+    ) {
+        val labels = paymentMethods.map { it.localizedName(requireContext()) }
+        dropdown.setAdapter(
+            ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, labels)
+        )
+        // Keep whatever the expense already carries even if that method has since been renamed
+        // or deleted, so editing an old expense never silently rewrites its payment method.
+        dropdown.setText(current.orEmpty(), false)
+    }
+
+    private fun renderDate(dateInput: TextView) {
+        dateInput.text = DATE_FORMAT.format(selectedSpentAtMillis)
+    }
+
+    private fun showDatePicker(dateInput: TextView) {
+        val calendar = Calendar.getInstance().apply { timeInMillis = selectedSpentAtMillis }
+        DatePickerDialog(
+            requireContext(),
+            { _, year, month, dayOfMonth ->
+                selectedSpentAtMillis = Calendar.getInstance().apply {
+                    timeInMillis = selectedSpentAtMillis
+                    set(Calendar.YEAR, year)
+                    set(Calendar.MONTH, month)
+                    set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                }.timeInMillis
+                renderDate(dateInput)
+            },
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        ).apply {
+            // An expense cannot have been paid in the future.
+            datePicker.maxDate = System.currentTimeMillis()
+        }.show()
     }
 
     private fun checkCategoryChip(chipGroup: ChipGroup, category: ExpenseCategory) {
@@ -101,7 +177,10 @@ class EditExpenseBottomSheet : BottomSheetDialogFragment() {
             ExpenseCategory.Shopping -> R.id.editCategoryShopping
             ExpenseCategory.Entertainment -> R.id.editCategoryEntertainment
             ExpenseCategory.Bills -> R.id.editCategoryBills
-            else -> R.id.editCategoryOther
+            ExpenseCategory.Travel -> R.id.editCategoryTravel
+            // Uncategorized is the receipt parser's fallback, not a user choice.
+            ExpenseCategory.Uncategorized,
+            ExpenseCategory.Other -> R.id.editCategoryOther
         }
         chipGroup.check(chipId)
     }
@@ -113,10 +192,19 @@ class EditExpenseBottomSheet : BottomSheetDialogFragment() {
             R.id.editCategoryShopping -> ExpenseCategory.Shopping
             R.id.editCategoryEntertainment -> ExpenseCategory.Entertainment
             R.id.editCategoryBills -> ExpenseCategory.Bills
+            R.id.editCategoryTravel -> ExpenseCategory.Travel
             else -> ExpenseCategory.Other
         }
 
     companion object {
         const val TAG = "EditExpenseBottomSheet"
+        private const val ARG_EXPENSE = "expense"
+        private const val STATE_SPENT_AT = "spent_at"
+        private val DATE_FORMAT = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+
+        fun newInstance(expense: Expense): EditExpenseBottomSheet =
+            EditExpenseBottomSheet().apply {
+                arguments = bundleOf(ARG_EXPENSE to expense)
+            }
     }
 }

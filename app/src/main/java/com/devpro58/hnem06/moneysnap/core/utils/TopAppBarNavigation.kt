@@ -1,10 +1,14 @@
 package com.devpro58.hnem06.moneysnap.core.utils
 
 import android.view.View
+import android.widget.ImageView
 import android.widget.PopupMenu
 import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import coil.load
 import com.devpro58.hnem06.moneysnap.R
+import com.devpro58.hnem06.moneysnap.presentation.common.ToolbarViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -28,7 +32,21 @@ fun Fragment.setupTopAppBarNavigation(
         }
     }
 
-    root.findViewById<View>(avatarId).setOnClickListener {
+    val avatar = root.findViewById<View>(avatarId)
+    avatar.setOnClickListener {
         bottomNavigation.selectedItemId = R.id.profileFragment
+    }
+
+    // Activity-scoped so every screen sharing this toolbar shows the same avatar, and no
+    // fragment needs to know about it.
+    if (avatar is ImageView) {
+        val toolbarViewModel = ViewModelProvider(requireActivity())[ToolbarViewModel::class.java]
+        toolbarViewModel.avatarUrl.observe(viewLifecycleOwner) { url ->
+            avatar.load(url) {
+                placeholder(R.drawable.user_profile_placeholder)
+                error(R.drawable.user_profile_placeholder)
+                fallback(R.drawable.user_profile_placeholder)
+            }
+        }
     }
 }

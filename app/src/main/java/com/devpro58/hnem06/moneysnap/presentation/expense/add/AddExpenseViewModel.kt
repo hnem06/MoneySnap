@@ -15,6 +15,7 @@ import com.devpro58.hnem06.moneysnap.domain.usecase.receipt.ScanReceiptUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @HiltViewModel
 class AddExpenseViewModel @Inject constructor(
@@ -82,8 +83,12 @@ class AddExpenseViewModel @Inject constructor(
                 )
             }.onSuccess {
                 _uiState.value = AddExpenseUiState.Saved
-            }.onFailure {
-                _uiState.value = AddExpenseUiState.Error("")
+            }.onFailure { error ->
+                // The throwable used to be discarded entirely, so an expired session, a full
+                // disk and a DB constraint violation all reached the user as the same generic
+                // "could not save" with nothing recorded anywhere.
+                Timber.e(error, "saveExpense failed")
+                _uiState.value = AddExpenseUiState.Error(error.localizedMessage.orEmpty())
             }
         }
     }

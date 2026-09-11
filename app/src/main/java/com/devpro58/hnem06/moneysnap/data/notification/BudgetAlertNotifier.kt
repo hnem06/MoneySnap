@@ -45,6 +45,9 @@ class BudgetAlertNotifier @Inject constructor(
     }
 
     suspend fun notifyIfNeeded(userId: String, alwaysNotifyOverBudget: Boolean = false) {
+        // The user's own switch, checked before the OS permission: someone who turned alerts off
+        // in Profile should not be re-prompted or notified regardless of what the system allows.
+        if (!settingsRepository.areBudgetAlertsEnabled()) return
         if (!settingsRepository.isMonthlyBudgetConfigured()) return
         if (!canPostNotifications()) return
 

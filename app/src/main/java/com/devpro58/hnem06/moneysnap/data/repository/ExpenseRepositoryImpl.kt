@@ -38,12 +38,16 @@ class ExpenseRepositoryImpl @Inject constructor(
             val now = System.currentTimeMillis()
             val monthStart = startOfMonth(now)
             val nextMonthStart = startOfNextMonth(now)
+            val previousMonthStart = startOfPreviousMonth(now)
             val todayStart = startOfDay(now)
             val tomorrowStart = todayStart + ONE_DAY_MILLIS
 
             HomeDashboard(
                 monthlyTotal = expenses
                     .filter { it.spentAtMillis in monthStart until nextMonthStart }
+                    .sumOf { it.amount },
+                previousMonthTotal = expenses
+                    .filter { it.spentAtMillis in previousMonthStart until monthStart }
                     .sumOf { it.amount },
                 todayTotal = expenses
                     .filter { it.spentAtMillis in todayStart until tomorrowStart }
@@ -242,6 +246,12 @@ class ExpenseRepositoryImpl @Inject constructor(
             set(Calendar.MINUTE, 0)
             set(Calendar.SECOND, 0)
             set(Calendar.MILLISECOND, 0)
+        }.timeInMillis
+
+    private fun startOfPreviousMonth(timestamp: Long): Long =
+        Calendar.getInstance().apply {
+            timeInMillis = startOfMonth(timestamp)
+            add(Calendar.MONTH, -1)
         }.timeInMillis
 
     private fun startOfNextMonth(timestamp: Long): Long =

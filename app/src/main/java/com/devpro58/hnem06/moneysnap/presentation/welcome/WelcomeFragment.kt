@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.devpro58.hnem06.moneysnap.R
+import com.devpro58.hnem06.moneysnap.core.utils.showTermsDialog
 import com.devpro58.hnem06.moneysnap.databinding.FragmentWelcomeBinding
 
 class WelcomeFragment : Fragment() {
@@ -34,6 +35,8 @@ class WelcomeFragment : Fragment() {
             getString(R.string.welcome_terms),
             Html.FROM_HTML_MODE_LEGACY
         )
+        // The text rendered as a link but had no listener, so tapping it did nothing.
+        binding.tvTerms.setOnClickListener { showTermsDialog() }
 
         // No permissions are requested here any more. The old up-front prompt discarded its
         // result, was skipped entirely for returning users, and asked for storage permissions the

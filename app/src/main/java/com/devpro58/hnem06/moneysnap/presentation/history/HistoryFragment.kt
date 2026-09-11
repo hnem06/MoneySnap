@@ -239,10 +239,20 @@ class HistoryFragment : Fragment() {
                 selectedAmountRange = min to max
                 viewModel.updateAmountRange(min, max)
                 binding.amountFilterChip.apply {
+                    // Raw Longs were formatted straight into the chip, so it read
+                    // "1000000 - 5000000" while every other amount in the app is VND-formatted.
                     text = when {
-                        min != null && max != null -> getString(R.string.history_amount_value, min, max)
-                        min != null -> getString(R.string.history_amount_from, min)
-                        max != null -> getString(R.string.history_amount_to, max)
+                        min != null && max != null -> getString(
+                            R.string.history_amount_value,
+                            MoneyFormatter.formatVnd(min),
+                            MoneyFormatter.formatVnd(max)
+                        )
+                        min != null -> getString(
+                            R.string.history_amount_from, MoneyFormatter.formatVnd(min)
+                        )
+                        max != null -> getString(
+                            R.string.history_amount_to, MoneyFormatter.formatVnd(max)
+                        )
                         else -> getString(R.string.history_filter_amount)
                     }
                     isChecked = min != null || max != null
@@ -530,8 +540,8 @@ class HistoryFragment : Fragment() {
     }
 
     private fun showEditSheet(expense: Expense) {
-        EditExpenseBottomSheet()
-            .setExpense(expense)
+        EditExpenseBottomSheet.newInstance(expense)
+            .setPaymentMethods(viewModel.paymentMethods.value.orEmpty())
             .setOnSaveListener(viewModel::updateExpense)
             .show(childFragmentManager, EditExpenseBottomSheet.TAG)
     }

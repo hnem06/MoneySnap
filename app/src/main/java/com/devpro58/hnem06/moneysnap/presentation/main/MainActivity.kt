@@ -49,6 +49,13 @@ class MainActivity : AppCompatActivity() {
             binding.offlineBanner.isVisible = !online
         }
 
+        // Budget is a detail screen with its own back arrow and deliberately has no bottom-nav
+        // entry. NavigationUI cannot resolve a matching menu item for it, so the previously
+        // selected tab stayed highlighted and lied about where the user was.
+        navHost.navController.addOnDestinationChangedListener { _, destination, _ ->
+            binding.bottomNavigation.isVisible = destination.id != R.id.budgetFragment
+        }
+
         if (savedInstanceState == null && intent.getBooleanExtra(EXTRA_OPEN_BUDGET_SETUP, false)) {
             intent.removeExtra(EXTRA_OPEN_BUDGET_SETUP)
             navHost.navController.navigate(R.id.budgetFragment)

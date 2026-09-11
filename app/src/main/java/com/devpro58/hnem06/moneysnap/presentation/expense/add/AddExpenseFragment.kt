@@ -180,7 +180,7 @@ class AddExpenseFragment : Fragment() {
                     if (openedFromHistory) {
                         returnToHistory()
                     } else {
-                        findNavController().navigate(R.id.homeFragment)
+                        findNavController().navigate(R.id.action_addExpense_to_home)
                     }
                 }
                 is AddExpenseUiState.Error -> {
@@ -249,6 +249,7 @@ class AddExpenseFragment : Fragment() {
                 R.id.categoryShoppingChip -> ExpenseCategory.Shopping
                 R.id.categoryEntertainmentChip -> ExpenseCategory.Entertainment
                 R.id.categoryBillsChip -> ExpenseCategory.Bills
+                R.id.categoryTravelChip -> ExpenseCategory.Travel
                 R.id.categoryOtherChip -> ExpenseCategory.Other
                 else -> ExpenseCategory.Food
             }
@@ -400,7 +401,9 @@ class AddExpenseFragment : Fragment() {
             ExpenseCategory.Shopping -> R.id.categoryShoppingChip
             ExpenseCategory.Entertainment -> R.id.categoryEntertainmentChip
             ExpenseCategory.Bills -> R.id.categoryBillsChip
-            ExpenseCategory.Travel,
+            ExpenseCategory.Travel -> R.id.categoryTravelChip
+            // Uncategorized is the receipt parser's fallback, not something a user picks, so it
+            // deliberately shares the "Other" chip.
             ExpenseCategory.Uncategorized,
             ExpenseCategory.Other -> R.id.categoryOtherChip
         }

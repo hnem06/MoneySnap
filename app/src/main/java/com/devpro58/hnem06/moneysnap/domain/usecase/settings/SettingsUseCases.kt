@@ -15,6 +15,18 @@ class SetDarkModeUseCase @Inject constructor(
     operator fun invoke(enabled: Boolean) = repository.setDarkMode(enabled)
 }
 
+class GetBudgetAlertsEnabledUseCase @Inject constructor(
+    private val repository: SettingsRepository
+) {
+    operator fun invoke(): Boolean = repository.areBudgetAlertsEnabled()
+}
+
+class SetBudgetAlertsEnabledUseCase @Inject constructor(
+    private val repository: SettingsRepository
+) {
+    operator fun invoke(enabled: Boolean) = repository.setBudgetAlertsEnabled(enabled)
+}
+
 class GetMonthlyBudgetUseCase @Inject constructor(
     private val repository: SettingsRepository
 ) {

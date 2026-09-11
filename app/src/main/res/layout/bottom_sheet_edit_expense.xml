@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_bottom_sheet"
@@ -114,6 +115,13 @@
             android:text="@string/category_bills" />
 
         <com.google.android.material.chip.Chip
+            android:id="@+id/editCategoryTravel"
+            style="@style/Widget.App.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/category_travel" />
+
+        <com.google.android.material.chip.Chip
             android:id="@+id/editCategoryOther"
             style="@style/Widget.App.Chip.Filter"
             android:layout_width="wrap_content"
@@ -121,21 +129,45 @@
             android:text="@string/category_other" />
     </com.google.android.material.chip.ChipGroup>
 
-    <!-- Payment method -->
-    <EditText
-        android:id="@+id/editPaymentMethodInput"
+    <!-- Date. The Add screen could set a date but Edit could not, so a receipt filed on the
+         wrong day could only be fixed by deleting and re-adding it. -->
+    <TextView
+        android:id="@+id/editDateInput"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginHorizontal="24dp"
         android:layout_marginTop="12dp"
         android:background="@drawable/bg_input_rounded"
-        android:hint="@string/add_payment_method_hint"
-        android:inputType="textCapSentences"
+        android:clickable="true"
+        android:drawablePadding="12dp"
+        android:focusable="true"
+        android:gravity="center_vertical"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        android:singleLine="true"
         android:textColor="#111827"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        app:drawableStartCompat="@drawable/ic_detail_calendar"
+        app:drawableTint="#6B7280"
+        tools:text="16/07/2026" />
+
+    <!-- Payment method: a dropdown of the user's managed methods. This was a free-text field,
+         so an edit could write a payment method that does not exist in the managed list. -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editPaymentMethodLayout"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="12dp"
+        android:hint="@string/add_payment_method_hint">
+
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/editPaymentMethodDropdown"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            android:textSize="14sp" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Note -->
     <EditText

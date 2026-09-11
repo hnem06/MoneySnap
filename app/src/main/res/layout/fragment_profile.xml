@@ -175,11 +175,13 @@
                             android:textColor="@color/text_dark"
                             android:textSize="15sp" />
 
+                        <!-- State is set from the stored preference AND the OS permission in
+                             bindNotificationsSwitch; hardcoding checked="true" here would make
+                             the switch lie for a second on every render. -->
                         <com.google.android.material.materialswitch.MaterialSwitch
                             android:id="@+id/switchNotifications"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:checked="true"
                             app:thumbTint="@color/white"
                             app:trackTint="@color/switch_track_tint" />
                     </LinearLayout>

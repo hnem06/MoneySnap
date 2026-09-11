@@ -16,8 +16,6 @@
     <string name="lang_select_subtitle">Please select the display language you want to use for MoneySnap.</string>
     <string name="lang_vietnamese">Tiếng Việt</string>
     <string name="lang_english">English</string>
-    <string name="lang_french">Français</string>
-    <string name="lang_japanese">日本語</string>
     <string name="lang_btn_continue">Continue</string>
 
     <!-- Login Screen Strings -->
@@ -43,7 +41,6 @@
     <string name="forgot_email_hint">Email address</string>
     <string name="forgot_btn">Send Request</string>
     <string name="forgot_success_message">Password reset instructions have been sent to your email.</string>
-    <string name="error_forgot_failed">Could not send the password reset request.</string>
 
     <!-- Terms Dialog -->
     <string name="terms_dialog_title">Terms &amp; Conditions</string>
@@ -53,15 +50,11 @@
     <!-- Validation & Error Messages -->
     <string name="error_email_empty">Please enter your email</string>
     <string name="error_password_empty">Please enter your password</string>
-    <string name="error_with_message">Error: %s</string>
-    <string name="error_login_failed">Login failed</string>
-    <string name="error_firebase_login_failed">Firebase sign-in failed</string>
     <string name="error_google_login">Google sign-in error: %s</string>
     <string name="error_name_empty">Please enter your full name</string>
     <string name="error_password_too_short">Password must be at least 6 characters</string>
     <string name="error_password_mismatch">Passwords do not match</string>
     <string name="error_terms_not_checked">You must agree to the Terms &amp; Conditions</string>
-    <string name="error_register_failed">Registration failed</string>
     <string name="error_default">Something went wrong. Please try again.</string>
     <string name="error_auth_invalid_credentials">Email or password is incorrect.</string>
     <string name="error_auth_invalid_user">This account does not exist or has been disabled.</string>
@@ -94,7 +87,6 @@
     <string name="home_recent_snaps">Recent snaps</string>
     <string name="home_see_all">See all</string>
     <string name="home_empty">No expenses yet</string>
-    <string name="history_title">Spending history</string>
     <string name="history_search_hint">Search expenses...</string>
     <string name="history_mode_calendar">Calendar</string>
     <string name="history_mode_search">Search</string>
@@ -137,6 +129,23 @@
     <string name="sync_retry">Retry</string>
     <string name="sync_retry_queued">Queued for sync</string>
     <string name="cd_sync_pending">This expense has not been synced</string>
+
+    <!-- Profile: rows that previously showed a chevron but did nothing when tapped -->
+    <string name="profile_currency_note">Vietnamese dong only for now</string>
+    <string name="profile_help_title">Help centre</string>
+    <string name="profile_help_message">• Adding an expense: tap + on the Home screen, or photograph a receipt to fill in the amount and date automatically.\n\n• Budget: set a monthly limit in Profile to be warned before you go over.\n\n• Sync: data is saved on the device first and pushed to the cloud when a connection is available. The app works offline.\n\n• New device: sign in with the same account and every expense is restored.</string>
+    <string name="profile_help_contact">Contact support</string>
+    <string name="profile_help_email">iamhn2006@gmail.com</string>
+    <string name="profile_help_email_subject">MoneySnap support</string>
+    <string name="profile_about_message">MoneySnap %1$s (build %2$d)\n\nA personal expense tracker that works offline and syncs through Firebase.\n\nReceipt recognition uses Google ML Kit on the device — receipt images are never sent to a third party for recognition.</string>
+    <string name="profile_dialog_close">Close</string>
+    <string name="profile_no_email_app">No email app found on this device</string>
+    <string name="notifications_permission_denied">Grant notification access in Settings to receive budget alerts</string>
+
+    <!-- Month-over-month comparison (shared by Home and Stats) -->
+    <string name="trend_up">Up %1$d%% vs last month</string>
+    <string name="trend_down">Down %1$d%% vs last month</string>
+    <string name="trend_flat">Same as last month</string>
     <string name="receipt_scan_no_data">No suitable amount or date was found on the receipt</string>
     <string name="receipt_scan_failed">This receipt could not be recognized</string>
     <string name="history_filter_all">All</string>
@@ -152,15 +161,13 @@
     <string name="history_amount_min">Minimum</string>
     <string name="history_amount_max">Maximum</string>
     <string name="history_amount_invalid">Maximum must be greater than minimum</string>
-    <string name="history_amount_value">%1$d - %2$d</string>
-    <string name="history_amount_from">From %1$d</string>
-    <string name="history_amount_to">Up to %1$d</string>
-    <string name="history_empty">No spending history yet</string>
+    <string name="history_amount_value">%1$s - %2$s</string>
+    <string name="history_amount_from">From %1$s</string>
+    <string name="history_amount_to">Up to %1$s</string>
     <string name="history_previous_month">Previous month</string>
     <string name="history_next_month">Next month</string>
     <string name="history_expense_label">↗ EXPENSE</string>
     <string name="history_expense_total_value">-%1$s</string>
-    <string name="history_no_expenses_day">No expenses on this day</string>
     <string name="history_day_expenses_title">Expenses on %1$s</string>
     <string name="history_day_total">Total spent: %1$s</string>
     <string name="weekday_monday">Mon</string>
@@ -170,7 +177,6 @@
     <string name="weekday_friday">Fri</string>
     <string name="weekday_saturday">Sat</string>
     <string name="weekday_sunday">Sun</string>
-    <string name="add_title">Add expense</string>
     <string name="add_receipt_hint">Tap to select or capture a receipt</string>
     <string name="add_pick_image">Choose image</string>
     <string name="add_take_photo">Take photo</string>
@@ -178,12 +184,10 @@
     <string name="add_description_hint">Description</string>
     <string name="add_note_hint">Note</string>
     <string name="add_payment_method_hint">Payment method</string>
-    <string name="add_payment_method_quick">Add payment method</string>
     <string name="add_save">Save expense</string>
     <string name="add_saved">Expense saved. The image will sync in the background.</string>
     <string name="error_amount_empty">Please enter an amount</string>
     <string name="error_title_empty">Please enter a description</string>
-    <string name="placeholder_coming_soon">Coming soon</string>
 
     <!-- Expense Categories -->
     <string name="category_food">Food</string>
@@ -199,12 +203,9 @@
     <string name="detail_date_time">Date &amp; Time</string>
     <string name="detail_payment_method">Payment method</string>
     <string name="detail_receipt_attached">Receipt attached</string>
-    <string name="detail_view">View ></string>
     <string name="detail_delete">Delete</string>
     <string name="detail_edit">Edit</string>
     <string name="detail_payment_cash">Cash</string>
-    <string name="detail_delete_placeholder">Delete will be available soon</string>
-    <string name="detail_edit_placeholder">Edit will be available soon</string>
     <string name="date_today">Today</string>
     <string name="date_yesterday">Yesterday</string>
 
@@ -272,7 +273,6 @@
     <string name="profile_account_settings">Account</string>
     <string name="profile_personal_info">Personal information</string>
     <string name="profile_payment_methods">Payment methods</string>
-    <string name="profile_payment_sub">Visa ending in 4242</string>
     <string name="profile_security">Security</string>
     <string name="profile_app_settings">App settings</string>
     <string name="profile_notifications">Notifications</string>

@@ -25,6 +25,15 @@ class SharedPreferencesSettingsRepository @Inject constructor(
             .apply()
     }
 
+    override fun areBudgetAlertsEnabled(): Boolean =
+        preferences.getBoolean(KEY_BUDGET_ALERTS_ENABLED, true)
+
+    override fun setBudgetAlertsEnabled(enabled: Boolean) {
+        preferences.edit()
+            .putBoolean(KEY_BUDGET_ALERTS_ENABLED, enabled)
+            .apply()
+    }
+
     override fun getMonthlyBudget(): Long =
         preferences.getLong(KEY_MONTHLY_BUDGET, DEFAULT_MONTHLY_BUDGET)
 
@@ -51,6 +60,7 @@ class SharedPreferencesSettingsRepository @Inject constructor(
     private companion object {
         const val PREFS_NAME = "MoneySnapPrefs"
         const val KEY_DARK_MODE = "dark_mode_enabled"
+        const val KEY_BUDGET_ALERTS_ENABLED = "budget_alerts_enabled"
         const val KEY_MONTHLY_BUDGET = "monthly_budget"
         const val KEY_MONTHLY_BUDGET_CONFIGURED = "monthly_budget_configured"
         const val DEFAULT_MONTHLY_BUDGET = 5_000_000L

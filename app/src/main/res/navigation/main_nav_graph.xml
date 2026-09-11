@@ -21,6 +21,18 @@
             android:name="spentAtMillis"
             android:defaultValue="-1L"
             app:argType="long" />
+
+        <!--
+            Returning Home after a save must pop, not push. navigate(R.id.homeFragment) grew the
+            back stack by one entry on every single save, so Back walked through every expense
+            the user had added in the session.
+        -->
+        <action
+            android:id="@+id/action_addExpense_to_home"
+            app:destination="@id/homeFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/main_nav_graph"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment

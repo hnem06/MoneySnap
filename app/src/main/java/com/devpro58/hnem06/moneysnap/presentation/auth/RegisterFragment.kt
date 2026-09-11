@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.devpro58.hnem06.moneysnap.R
+import com.devpro58.hnem06.moneysnap.core.utils.showTermsDialog
 import com.devpro58.hnem06.moneysnap.core.utils.AuthExceptionHandler
 import com.devpro58.hnem06.moneysnap.databinding.FragmentRegisterBinding
 import com.devpro58.hnem06.moneysnap.presentation.main.MainActivity
@@ -123,17 +124,6 @@ class RegisterFragment : Fragment() {
         activity?.finish()
     }
 
-    private fun showTermsDialog() {
-        context?.let { ctx ->
-            com.google.android.material.dialog.MaterialAlertDialogBuilder(ctx)
-                .setTitle(R.string.terms_dialog_title)
-                .setMessage(R.string.terms_dialog_message)
-                .setPositiveButton(R.string.terms_dialog_btn_ok) { dialog, _ ->
-                    dialog.dismiss()
-                }
-                .show()
-        }
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()

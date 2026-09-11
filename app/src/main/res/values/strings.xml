@@ -16,8 +16,6 @@
     <string name="lang_select_subtitle">Vui lòng chọn ngôn ngữ hiển thị bạn muốn sử dụng cho MoneySnap.</string>
     <string name="lang_vietnamese">Tiếng Việt</string>
     <string name="lang_english">English</string>
-    <string name="lang_french">Français</string>
-    <string name="lang_japanese">日本語</string>
     <string name="lang_btn_continue">Tiếp tục</string>
 
     <!-- Login Screen Strings -->
@@ -43,7 +41,6 @@
     <string name="forgot_email_hint">Địa chỉ Email</string>
     <string name="forgot_btn">Gửi yêu cầu</string>
     <string name="forgot_success_message">Đã gửi hướng dẫn đặt lại mật khẩu về email của bạn.</string>
-    <string name="error_forgot_failed">Gửi yêu cầu đặt lại mật khẩu thất bại.</string>
     
     <!-- Terms Dialog -->
     <string name="terms_dialog_title">Điều khoản &amp; Điều kiện</string>
@@ -53,15 +50,11 @@
     <!-- Validation & Error Messages -->
     <string name="error_email_empty">Vui lòng nhập email</string>
     <string name="error_password_empty">Vui lòng nhập mật khẩu</string>
-    <string name="error_with_message">Lỗi: %s</string>
-    <string name="error_login_failed">Đăng nhập thất bại</string>
-    <string name="error_firebase_login_failed">Đăng nhập với Firebase thất bại</string>
     <string name="error_google_login">Lỗi đăng nhập Google: %s</string>
     <string name="error_name_empty">Vui lòng nhập họ và tên</string>
     <string name="error_password_too_short">Mật khẩu phải tối thiểu 6 ký tự</string>
     <string name="error_password_mismatch">Mật khẩu xác nhận không khớp</string>
     <string name="error_terms_not_checked">Bạn phải đồng ý với Điều khoản &amp; Điều kiện</string>
-    <string name="error_register_failed">Đăng ký thất bại</string>
     <string name="error_default">Đã xảy ra lỗi. Vui lòng thử lại.</string>
     <string name="error_auth_invalid_credentials">Email hoặc mật khẩu không đúng.</string>
     <string name="error_auth_invalid_user">Tài khoản không tồn tại hoặc đã bị vô hiệu hóa.</string>
@@ -97,7 +90,6 @@
     <string name="home_recent_snaps">Gần đây</string>
     <string name="home_see_all">Xem tất cả</string>
     <string name="home_empty">Chưa có khoản chi nào</string>
-    <string name="history_title">Lịch sử chi tiêu</string>
     <string name="history_search_hint">Tìm khoản chi...</string>
     <string name="history_mode_calendar">Lịch</string>
     <string name="history_mode_search">Tìm kiếm</string>
@@ -140,6 +132,23 @@
     <string name="sync_retry">Thử lại</string>
     <string name="sync_retry_queued">Đã đưa vào hàng đợi đồng bộ</string>
     <string name="cd_sync_pending">Khoản chi này chưa được đồng bộ</string>
+
+    <!-- Profile: các dòng trước đây có mũi tên nhưng bấm không có gì xảy ra -->
+    <string name="profile_currency_note">Hiện chỉ hỗ trợ đồng Việt Nam</string>
+    <string name="profile_help_title">Trung tâm trợ giúp</string>
+    <string name="profile_help_message">• Thêm chi tiêu: bấm nút + ở màn hình Trang chủ, hoặc chụp ảnh hoá đơn để tự điền số tiền và ngày.\n\n• Ngân sách: đặt hạn mức tháng trong Hồ sơ để nhận thông báo khi sắp vượt.\n\n• Đồng bộ: dữ liệu lưu trên máy trước rồi tự đẩy lên đám mây khi có mạng. Bạn dùng được app khi không có Internet.\n\n• Đổi thiết bị: đăng nhập lại bằng cùng tài khoản, mọi khoản chi sẽ được khôi phục.</string>
+    <string name="profile_help_contact">Liên hệ hỗ trợ</string>
+    <string name="profile_help_email">iamhn2006@gmail.com</string>
+    <string name="profile_help_email_subject">Hỗ trợ MoneySnap</string>
+    <string name="profile_about_message">MoneySnap %1$s (build %2$d)\n\nỨng dụng ghi chép chi tiêu cá nhân, hoạt động ngoại tuyến và đồng bộ qua Firebase.\n\nNhận dạng hoá đơn bằng Google ML Kit, xử lý ngay trên máy — ảnh hoá đơn không gửi tới bên thứ ba nào để nhận dạng.</string>
+    <string name="profile_dialog_close">Đóng</string>
+    <string name="profile_no_email_app">Không tìm thấy ứng dụng email trên máy</string>
+    <string name="notifications_permission_denied">Cần cấp quyền thông báo trong Cài đặt để nhận cảnh báo ngân sách</string>
+
+    <!-- So sánh với tháng trước (dùng chung Trang chủ và Thống kê) -->
+    <string name="trend_up">Tăng %1$d%% so với tháng trước</string>
+    <string name="trend_down">Giảm %1$d%% so với tháng trước</string>
+    <string name="trend_flat">Ngang tháng trước</string>
     <string name="receipt_scan_no_data">Không tìm thấy số tiền hoặc ngày phù hợp trên hóa đơn</string>
     <string name="receipt_scan_failed">Không thể nhận dạng hóa đơn này</string>
     <string name="history_filter_all">Tất cả</string>
@@ -155,15 +164,13 @@
     <string name="history_amount_min">Từ</string>
     <string name="history_amount_max">Đến</string>
     <string name="history_amount_invalid">Số tiền tối đa phải lớn hơn số tiền tối thiểu</string>
-    <string name="history_amount_value">%1$d - %2$d</string>
-    <string name="history_amount_from">Từ %1$d</string>
-    <string name="history_amount_to">Đến %1$d</string>
-    <string name="history_empty">Chưa có lịch sử chi tiêu</string>
+    <string name="history_amount_value">%1$s - %2$s</string>
+    <string name="history_amount_from">Từ %1$s</string>
+    <string name="history_amount_to">Đến %1$s</string>
     <string name="history_previous_month">Tháng trước</string>
     <string name="history_next_month">Tháng sau</string>
     <string name="history_expense_label">↗ CHI</string>
     <string name="history_expense_total_value">-%1$s</string>
-    <string name="history_no_expenses_day">Ngày này chưa có khoản chi</string>
     <string name="history_day_expenses_title">Các khoản chi ngày %1$s</string>
     <string name="history_day_total">Tổng chi: %1$s</string>
     <string name="weekday_monday">T2</string>
@@ -173,7 +180,6 @@
     <string name="weekday_friday">T6</string>
     <string name="weekday_saturday">T7</string>
     <string name="weekday_sunday">CN</string>
-    <string name="add_title">Thêm chi tiêu</string>
     <string name="add_receipt_hint">Chạm để chọn/chụp hóa đơn</string>
     <string name="add_pick_image">Chọn ảnh</string>
     <string name="add_take_photo">Chụp ảnh</string>
@@ -181,12 +187,10 @@
     <string name="add_description_hint">Mô tả</string>
     <string name="add_note_hint">Ghi chú</string>
     <string name="add_payment_method_hint">Phương thức thanh toán</string>
-    <string name="add_payment_method_quick">Thêm phương thức thanh toán</string>
     <string name="add_save">Lưu chi tiêu</string>
     <string name="add_saved">Đã lưu chi tiêu. Ảnh sẽ đồng bộ trong nền.</string>
     <string name="error_amount_empty">Vui lòng nhập số tiền</string>
     <string name="error_title_empty">Vui lòng nhập mô tả</string>
-    <string name="placeholder_coming_soon">Sắp có</string>
 
     <!-- Expense Categories -->
     <string name="category_food">Ăn uống</string>
@@ -202,12 +206,9 @@
     <string name="detail_date_time">Ngày &amp; Giờ</string>
     <string name="detail_payment_method">Phương thức</string>
     <string name="detail_receipt_attached">Hóa đơn đính kèm</string>
-    <string name="detail_view">Xem ></string>
     <string name="detail_delete">Xóa</string>
     <string name="detail_edit">Chỉnh sửa</string>
     <string name="detail_payment_cash">Tiền mặt</string>
-    <string name="detail_delete_placeholder">Chức năng xóa sẽ sớm được cập nhật</string>
-    <string name="detail_edit_placeholder">Chức năng chỉnh sửa sẽ sớm được cập nhật</string>
     <string name="date_today">Hôm nay</string>
     <string name="date_yesterday">Hôm qua</string>
 
@@ -273,7 +274,6 @@
     <string name="profile_account_settings">Tài khoản</string>
     <string name="profile_personal_info">Thông tin cá nhân</string>
     <string name="profile_payment_methods">Phương thức thanh toán</string>
-    <string name="profile_payment_sub">Visa kết thúc 4242</string>
     <string name="profile_security">Bảo mật</string>
     <string name="profile_app_settings">Cài đặt ứng dụng</string>
     <string name="profile_notifications">Thông báo</string>
