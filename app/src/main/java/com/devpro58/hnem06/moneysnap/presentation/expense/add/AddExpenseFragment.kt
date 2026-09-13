@@ -27,6 +27,8 @@ import com.devpro58.hnem06.moneysnap.core.utils.VndAmountFormatter
 import com.devpro58.hnem06.moneysnap.core.utils.enableVndAmountFormatting
 import com.devpro58.hnem06.moneysnap.databinding.FragmentAddExpenseBinding
 import com.devpro58.hnem06.moneysnap.domain.model.ExpenseCategory
+import com.devpro58.hnem06.moneysnap.domain.model.IncomeCategory
+import com.devpro58.hnem06.moneysnap.domain.model.TransactionType
 import com.devpro58.hnem06.moneysnap.domain.model.PaymentMethod
 import com.devpro58.hnem06.moneysnap.domain.model.PaymentMethodSyncError
 import com.devpro58.hnem06.moneysnap.domain.model.PaymentMethodSyncException
@@ -47,6 +49,8 @@ class AddExpenseFragment : Fragment() {
     private var selectedReceiptUri: Uri? = null
     private var cameraReceiptUri: Uri? = null
     private var selectedCategory = ExpenseCategory.Food
+    private var selectedIncomeCategory = IncomeCategory.Salary
+    private var transactionType = TransactionType.Expense
     private var paymentMethods: List<PaymentMethod> = emptyList()
     private var selectedPaymentMethod: PaymentMethod? = null
     private var pendingPaymentMethodSelectionId: String? = null
@@ -118,6 +122,7 @@ class AddExpenseFragment : Fragment() {
         updateSelectedDateLabel()
         binding.expenseDateInput.setOnClickListener { showExpenseDatePicker() }
         setupCategoryChips()
+        setupTransactionTypeToggle()
         setupPaymentMethodDropdown()
 
         binding.receiptPickerContainer.setOnClickListener {
@@ -256,6 +261,42 @@ class AddExpenseFragment : Fragment() {
         }
     }
 
+    /**
+     * Switching direction swaps which category group is shown. The receipt picker stays available
+     * for both: a payslip or a transfer confirmation is as worth attaching as a till receipt.
+     */
+    private fun setupTransactionTypeToggle() {
+        binding.transactionTypeToggle.check(R.id.typeExpenseButton)
+        renderTransactionType()
+
+        binding.transactionTypeToggle.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (!isChecked) return@addOnButtonCheckedListener
+            transactionType = if (checkedId == R.id.typeIncomeButton) {
+                TransactionType.Income
+            } else {
+                TransactionType.Expense
+            }
+            renderTransactionType()
+        }
+
+        binding.incomeCategoryChipGroup.setOnCheckedStateChangeListener { _, checkedIds ->
+            selectedIncomeCategory = when (checkedIds.firstOrNull()) {
+                R.id.incomeBonusChip -> IncomeCategory.Bonus
+                R.id.incomeGiftChip -> IncomeCategory.Gift
+                R.id.incomeInvestmentChip -> IncomeCategory.Investment
+                R.id.incomeRefundChip -> IncomeCategory.Refund
+                R.id.incomeOtherChip -> IncomeCategory.OtherIncome
+                else -> IncomeCategory.Salary
+            }
+        }
+    }
+
+    private fun renderTransactionType() {
+        val isIncome = transactionType == TransactionType.Income
+        binding.categoryChipGroup.visibility = if (isIncome) View.GONE else View.VISIBLE
+        binding.incomeCategoryChipGroup.visibility = if (isIncome) View.VISIBLE else View.GONE
+    }
+
     private fun setupPaymentMethodDropdown() {
         binding.paymentMethodDropdown.setOnItemClickListener { _, _, position, _ ->
             selectedPaymentMethod = paymentMethods.getOrNull(position)
@@ -347,7 +388,11 @@ class AddExpenseFragment : Fragment() {
                 ?: binding.paymentMethodDropdown.text.toString().trim(),
             note = binding.noteEditText.text.toString().trim(),
             receiptSourceUri = selectedReceiptUri?.toString(),
-            spentAtMillis = selectedSpentAtMillis
+            spentAtMillis = selectedSpentAtMillis,
+            type = transactionType,
+            incomeCategory = selectedIncomeCategory.takeIf {
+                transactionType == TransactionType.Income
+            }
         )
     }
 

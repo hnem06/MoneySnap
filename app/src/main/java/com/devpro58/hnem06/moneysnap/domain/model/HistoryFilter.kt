@@ -6,5 +6,7 @@ data class HistoryFilter(
     val dateRangeStart: Long? = null,
     val dateRangeEnd: Long? = null,
     val amountMin: Long? = null,
-    val amountMax: Long? = null
+    val amountMax: Long? = null,
+    /** null shows both directions. */
+    val type: TransactionType? = null
 )

@@ -71,6 +71,7 @@
     <string name="error_save_expense_failed">Could not save the expense</string>
     <string name="error_home_load_failed">Could not load data</string>
     <string name="error_history_load_failed">Could not load history</string>
+    <string name="error_stats_load_failed">Could not load statistics</string>
 
     <!-- Main Tabs -->
     <string name="tab_home">Home</string>
@@ -353,4 +354,19 @@
     <string name="security_deleted">Account deleted</string>
     <string name="security_delete_failed">Could not delete the account. Please try again.</string>
     <string name="security_working">Working…</string>
+
+    <!-- Income / balance -->
+    <string name="home_income">Income</string>
+    <string name="home_balance">Balance</string>
+    <string name="add_type_expense">Expense</string>
+    <string name="add_type_income">Income</string>
+    <string name="income_category_salary">Salary</string>
+    <string name="income_category_bonus">Bonus</string>
+    <string name="income_category_gift">Gift</string>
+    <string name="income_category_investment">Investment</string>
+    <string name="income_category_refund">Refund</string>
+    <string name="income_category_other">Other</string>
+    <string name="history_filter_type_all">All</string>
+    <string name="history_filter_type_expense">Expenses</string>
+    <string name="history_filter_type_income">Income</string>
 </resources>

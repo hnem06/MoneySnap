@@ -22,5 +22,14 @@ data class Expense(
     val syncStatus: ExpenseSyncStatus,
     val spentAtMillis: Long,
     val createdAtMillis: Long,
-    val updatedAtMillis: Long
-) : Serializable
+    val updatedAtMillis: Long,
+    val type: TransactionType = TransactionType.Expense,
+    /** Non-null exactly when [type] is [TransactionType.Income]. */
+    val incomeCategory: IncomeCategory? = null
+) : Serializable {
+
+    val isIncome: Boolean get() = type == TransactionType.Income
+
+    /** Negative for spending, positive for income — for balance arithmetic. */
+    val signedAmount: Long get() = if (isIncome) amount else -amount
+}

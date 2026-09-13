@@ -7,6 +7,8 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.devpro58.hnem06.moneysnap.domain.model.AddExpenseInput
 import com.devpro58.hnem06.moneysnap.domain.model.ExpenseCategory
+import com.devpro58.hnem06.moneysnap.domain.model.IncomeCategory
+import com.devpro58.hnem06.moneysnap.domain.model.TransactionType
 import com.devpro58.hnem06.moneysnap.domain.model.PaymentMethod
 import com.devpro58.hnem06.moneysnap.domain.usecase.expense.AddExpenseUseCase
 import com.devpro58.hnem06.moneysnap.domain.usecase.payment.AddPaymentMethodUseCase
@@ -65,7 +67,9 @@ class AddExpenseViewModel @Inject constructor(
         paymentMethod: String?,
         note: String?,
         receiptSourceUri: String?,
-        spentAtMillis: Long
+        spentAtMillis: Long,
+        type: TransactionType,
+        incomeCategory: IncomeCategory?
     ) {
         _uiState.value = AddExpenseUiState.Saving
         viewModelScope.launch {
@@ -78,7 +82,9 @@ class AddExpenseViewModel @Inject constructor(
                         paymentMethod = paymentMethod?.takeIf { it.isNotBlank() },
                         note = note?.takeIf { it.isNotBlank() },
                         receiptSourceUri = receiptSourceUri,
-                        spentAtMillis = spentAtMillis
+                        spentAtMillis = spentAtMillis,
+                        type = type,
+                        incomeCategory = incomeCategory
                     )
                 )
             }.onSuccess {

@@ -103,21 +103,52 @@ class HomeFragment : Fragment() {
 
     private fun renderContent(state: HomeUiState.Content) {
         val dashboard = state.dashboard
-        binding.monthlyTotalText.text = MoneyFormatter.formatVnd(dashboard.monthlyTotal)
-        binding.todayTotalText.text = MoneyFormatter.formatVnd(dashboard.todayTotal)
+        binding.monthlyTotalText.text = MoneyFormatter.formatVnd(dashboard.monthlyExpenseTotal)
+        binding.todayTotalText.text = MoneyFormatter.formatVnd(dashboard.todayExpenseTotal)
+        bindBalance(dashboard)
         binding.monthlyExpenseCountText.text = dashboard.monthlyExpenseCount.toString()
         // Reset the text as well as the visibility: the error branch reuses this view, and
         // without this a recovered load would still be showing the failure message.
         binding.homeEmptyText.setText(R.string.home_empty)
         binding.homeEmptyText.visibility =
-            if (dashboard.recentExpenses.isEmpty()) View.VISIBLE else View.GONE
+            if (dashboard.recentTransactions.isEmpty()) View.VISIBLE else View.GONE
 
-        bindMonthlyTrend(dashboard.monthlyTotal, dashboard.previousMonthTotal)
+        bindMonthlyTrend(dashboard.monthlyExpenseTotal, dashboard.previousMonthExpenseTotal)
 
         binding.recentSnapsContainer.removeAllViews()
-        dashboard.recentExpenses.forEach { expense ->
+        dashboard.recentTransactions.forEach { expense ->
             binding.recentSnapsContainer.addView(createExpenseCard(expense))
         }
+    }
+
+    /**
+     * Income and balance for the month.
+     *
+     * Hidden entirely until the user records income: showing "Income 0 đ / Balance −2.400.000 đ"
+     * to someone who only tracks spending presents their whole month as a loss, which is not what
+     * the number means for them.
+     */
+    private fun bindBalance(dashboard: com.devpro58.hnem06.moneysnap.domain.model.HomeDashboard) {
+        if (dashboard.monthlyIncomeTotal <= 0L) {
+            binding.balanceContainer.visibility = View.GONE
+            return
+        }
+
+        binding.balanceContainer.visibility = View.VISIBLE
+        binding.monthlyIncomeText.text = MoneyFormatter.formatVnd(dashboard.monthlyIncomeTotal)
+
+        val balance = dashboard.monthlyBalance
+        // The sign carries the meaning here, so it is shown explicitly rather than left implicit.
+        binding.monthlyBalanceText.text = buildString {
+            if (balance > 0) append('+')
+            append(MoneyFormatter.formatVnd(balance))
+        }
+        binding.monthlyBalanceText.setTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                if (balance < 0) R.color.danger_red else R.color.success_green
+            )
+        )
     }
 
     /**

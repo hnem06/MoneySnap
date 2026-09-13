@@ -71,6 +71,7 @@
     <string name="error_save_expense_failed">Không lưu được chi tiêu</string>
     <string name="error_home_load_failed">Không tải được dữ liệu</string>
     <string name="error_history_load_failed">Không tải được lịch sử</string>
+    <string name="error_stats_load_failed">Không tải được thống kê</string>
 
     <!-- Google Auth Web Client ID -->
     <string name="google_web_client_id" translatable="false">1020959885659-8gukmhjttk9jab1nin28hsl1b74r254d.apps.googleusercontent.com</string>
@@ -356,4 +357,19 @@
     <string name="security_deleted">Đã xoá tài khoản</string>
     <string name="security_delete_failed">Không xoá được tài khoản. Vui lòng thử lại.</string>
     <string name="security_working">Đang xử lý…</string>
+
+    <!-- Thu nhập / số dư -->
+    <string name="home_income">Thu nhập</string>
+    <string name="home_balance">Số dư</string>
+    <string name="add_type_expense">Chi</string>
+    <string name="add_type_income">Thu</string>
+    <string name="income_category_salary">Lương</string>
+    <string name="income_category_bonus">Thưởng</string>
+    <string name="income_category_gift">Quà tặng</string>
+    <string name="income_category_investment">Đầu tư</string>
+    <string name="income_category_refund">Hoàn tiền</string>
+    <string name="income_category_other">Khác</string>
+    <string name="history_filter_type_all">Tất cả</string>
+    <string name="history_filter_type_expense">Chi</string>
+    <string name="history_filter_type_income">Thu</string>
 </resources>

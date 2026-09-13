@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -48,11 +49,21 @@ class StatsFragment : Fragment() {
 
         selectedWeek = Calendar.getInstance().get(Calendar.WEEK_OF_MONTH)
 
-        viewModel.expenses.observe(viewLifecycleOwner) { expenses ->
-            bindSummary(view, expenses)
-            bindMonthlyChart(view, expenses)
-            bindCategoryBreakdown(view, expenses)
-            bindWeeklyTrends(view, expenses)
+        viewModel.uiState.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is StatsUiState.Content -> {
+                    bindSummary(view, state.expenses)
+                    bindMonthlyChart(view, state.expenses)
+                    bindCategoryBreakdown(view, state.expenses)
+                    bindWeeklyTrends(view, state.expenses)
+                }
+                // A load failure previously arrived as an empty list, so the screen claimed the
+                // user had spent nothing.
+                is StatsUiState.Error -> Toast.makeText(
+                    requireContext(), R.string.error_stats_load_failed, Toast.LENGTH_SHORT
+                ).show()
+                StatsUiState.Loading -> Unit
+            }
         }
     }
 

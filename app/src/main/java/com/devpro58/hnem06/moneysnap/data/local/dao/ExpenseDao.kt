@@ -50,16 +50,33 @@ interface ExpenseDao {
     @Query("DELETE FROM expenses WHERE userId = :userId")
     suspend fun deleteAllByUser(userId: String)
 
+    /**
+     * Spending in a period. `type = 'Expense'` is essential, not cosmetic: this feeds the budget
+     * evaluation, and counting a salary as spending would fire an over-budget alert on payday.
+     */
     @Query(
         """
         SELECT COALESCE(SUM(amount), 0) FROM expenses
         WHERE userId = :userId
+          AND type = 'Expense'
           AND spentAtMillis >= :startMillis
           AND spentAtMillis < :endMillis
           AND syncStatus != 'PendingDelete'
         """
     )
     suspend fun getTotalForPeriod(userId: String, startMillis: Long, endMillis: Long): Long
+
+    /** Counts transactions of either direction in a period — logging income also counts as use. */
+    @Query(
+        """
+        SELECT COUNT(*) FROM expenses
+        WHERE userId = :userId
+          AND spentAtMillis >= :startMillis
+          AND spentAtMillis < :endMillis
+          AND syncStatus != 'PendingDelete'
+        """
+    )
+    suspend fun countInPeriod(userId: String, startMillis: Long, endMillis: Long): Int
 
     @Upsert
     suspend fun upsert(expense: ExpenseEntity)

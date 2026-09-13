@@ -2,11 +2,11 @@ package com.devpro58.hnem06.moneysnap.core.di
 
 import android.content.Context
 import androidx.room.Room
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.devpro58.hnem06.moneysnap.data.local.dao.ExpenseDao
 import com.devpro58.hnem06.moneysnap.data.local.dao.PaymentMethodDao
 import com.devpro58.hnem06.moneysnap.data.local.db.AppDatabase
+import com.devpro58.hnem06.moneysnap.data.local.db.MIGRATION_1_2
+import com.devpro58.hnem06.moneysnap.data.local.db.MIGRATION_2_3
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,7 +28,9 @@ object DatabaseModule {
             AppDatabase::class.java,
             "moneysnap.db"
         )
-            .addMigrations(MIGRATION_1_2)
+            // Never add fallbackToDestructiveMigration here: it would silently delete a user's
+            // expense history on any schema change we forgot to write a migration for.
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
             .build()
 
     @Provides
@@ -38,26 +40,4 @@ object DatabaseModule {
     @Provides
     fun providePaymentMethodDao(database: AppDatabase): PaymentMethodDao =
         database.paymentMethodDao()
-
-    /** Adds the `payment_methods` table. `internal` so MigrationTest can validate it. */
-    internal val MIGRATION_1_2 = object : Migration(1, 2) {
-        override fun migrate(db: SupportSQLiteDatabase) {
-            db.execSQL(
-                """
-                CREATE TABLE IF NOT EXISTS `payment_methods` (
-                    `id` TEXT NOT NULL,
-                    `userId` TEXT NOT NULL,
-                    `name` TEXT NOT NULL,
-                    `builtInKey` TEXT,
-                    `createdAtMillis` INTEGER NOT NULL,
-                    `updatedAtMillis` INTEGER NOT NULL,
-                    PRIMARY KEY(`id`)
-                )
-                """.trimIndent()
-            )
-            db.execSQL("CREATE INDEX IF NOT EXISTS `index_payment_methods_userId` ON `payment_methods` (`userId`)")
-            db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_payment_methods_userId_name` ON `payment_methods` (`userId`, `name`)")
-            db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_payment_methods_userId_builtInKey` ON `payment_methods` (`userId`, `builtInKey`)")
-        }
-    }
 }

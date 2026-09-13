@@ -7,5 +7,8 @@ data class AddExpenseInput(
     val paymentMethod: String? = null,
     val note: String? = null,
     val receiptSourceUri: String? = null,
-    val spentAtMillis: Long
+    val spentAtMillis: Long,
+    val type: TransactionType = TransactionType.Expense,
+    /** Required when [type] is Income; ignored otherwise. */
+    val incomeCategory: IncomeCategory? = null
 )

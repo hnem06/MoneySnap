@@ -9,7 +9,6 @@ import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.os.bundleOf
 import com.devpro58.hnem06.moneysnap.R
 import com.devpro58.hnem06.moneysnap.core.utils.VndAmountFormatter
 import com.devpro58.hnem06.moneysnap.core.utils.enableVndAmountFormatting
@@ -204,7 +203,7 @@ class EditExpenseBottomSheet : BottomSheetDialogFragment() {
 
         fun newInstance(expense: Expense): EditExpenseBottomSheet =
             EditExpenseBottomSheet().apply {
-                arguments = bundleOf(ARG_EXPENSE to expense)
+                arguments = Bundle().apply { putSerializable(ARG_EXPENSE, expense) }
             }
     }
 }

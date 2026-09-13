@@ -42,20 +42,23 @@ class ExpenseRepositoryImpl @Inject constructor(
             val todayStart = startOfDay(now)
             val tomorrowStart = todayStart + ONE_DAY_MILLIS
 
+            // Spending figures exclude income throughout; only the balance and the recent list
+            // mix the two directions.
+            val thisMonth = expenses.filter { it.spentAtMillis in monthStart until nextMonthStart }
+
             HomeDashboard(
-                monthlyTotal = expenses
-                    .filter { it.spentAtMillis in monthStart until nextMonthStart }
-                    .sumOf { it.amount },
-                previousMonthTotal = expenses
+                monthlyExpenseTotal = thisMonth.filterNot { it.isIncome }.sumOf { it.amount },
+                monthlyIncomeTotal = thisMonth.filter { it.isIncome }.sumOf { it.amount },
+                previousMonthExpenseTotal = expenses
                     .filter { it.spentAtMillis in previousMonthStart until monthStart }
+                    .filterNot { it.isIncome }
                     .sumOf { it.amount },
-                todayTotal = expenses
+                todayExpenseTotal = expenses
                     .filter { it.spentAtMillis in todayStart until tomorrowStart }
+                    .filterNot { it.isIncome }
                     .sumOf { it.amount },
-                monthlyExpenseCount = expenses.count {
-                    it.spentAtMillis in monthStart until nextMonthStart
-                },
-                recentExpenses = expenses.take(6)
+                monthlyExpenseCount = thisMonth.count { !it.isIncome },
+                recentTransactions = expenses.take(6)
             )
         }
 
@@ -63,7 +66,13 @@ class ExpenseRepositoryImpl @Inject constructor(
         expenseDao.observeVisibleByUser(userId).map { entities ->
             entities.map { it.toDomain() }
                 .filter { expense ->
-                    filter.category == null || expense.category == filter.category
+                    filter.type == null || expense.type == filter.type
+                }
+                .filter { expense ->
+                    // An expense-category filter implies expenses only: income rows carry
+                    // Uncategorized and would otherwise leak into an "Uncategorized" filter.
+                    filter.category == null ||
+                        (!expense.isIncome && expense.category == filter.category)
                 }
                 .filter { expense ->
                     val query = filter.query.trim()
@@ -112,13 +121,19 @@ class ExpenseRepositoryImpl @Inject constructor(
             syncStatus = ExpenseSyncStatus.PendingUpload,
             spentAtMillis = input.spentAtMillis,
             createdAtMillis = now,
-            updatedAtMillis = now
+            updatedAtMillis = now,
+            type = input.type,
+            incomeCategory = input.incomeCategory
         )
 
         expenseDao.upsert(expense.toEntity())
         syncScheduler.enqueueExpenseSync(expense.id)
-        runCatching {
-            budgetAlertNotifier.notifyIfNeeded(userId, alwaysNotifyOverBudget = true)
+        // Recording income cannot push anyone over a spending budget, so skip the evaluation
+        // rather than run it and rely on the total being unchanged.
+        if (!expense.isIncome) {
+            runCatching {
+                budgetAlertNotifier.notifyIfNeeded(userId, alwaysNotifyOverBudget = true)
+            }
         }
         return expense
     }

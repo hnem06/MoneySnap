@@ -14,7 +14,7 @@ import com.devpro58.hnem06.moneysnap.data.local.entity.PaymentMethodEntity
  */
 @Database(
     entities = [ExpenseEntity::class, PaymentMethodEntity::class],
-    version = 2,
+    version = 3,
     exportSchema = true
 )
 abstract class AppDatabase : RoomDatabase() {
